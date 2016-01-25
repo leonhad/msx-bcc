@@ -33,27 +33,14 @@ AC_ARG_ENABLE(debug,
 )
 AM_CONDITIONAL(ENABLE_DEBUG, test "$enable_debug" = "yes")
 CXXFLAGS="$DEBUG_CFLAGS $CXXFLAGS"
-AC_LANG_CPLUSPLUS
-AC_PROG_CC
+
+AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AM_PROG_AS
 AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_PROG_AWK
-
-# Checks for libraries.
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_TYPE_SIZE_T
 
 # Checks for library functions.
 
