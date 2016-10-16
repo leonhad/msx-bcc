@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT([bcc], [0.1], [leonhad@gmail.com])
+AC_INIT([bcc], [0.0.1], [leonhad@gmail.com])
 AM_INIT_AUTOMAKE()
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
@@ -48,7 +48,6 @@ AC_CONFIG_FILES([Makefile
                  bcc/Makefile
                  libbasic/Makefile
                  libbasic/ARM/Makefile
-                 libbasic/x86-32/Makefile
                  libbasic/x86-64/Makefile
 ])
 AC_OUTPUT

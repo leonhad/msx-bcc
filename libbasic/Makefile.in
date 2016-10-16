@@ -305,7 +305,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = ARM x86-32 x86-64
+SUBDIRS = ARM x86-64
 all: all-recursive
 
 .SUFFIXES:
