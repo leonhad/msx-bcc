@@ -1,6 +1,6 @@
 AC_PREREQ(2.61)
 AC_INIT([bcc], [0.0.1], [leonhad@gmail.com])
-AM_INIT_AUTOMAKE()
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
