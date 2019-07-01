@@ -1,9 +1,5 @@
 /out
 
-/html
-
-/latex
-
 *.gcov
 
 *.gcda
@@ -14,8 +10,6 @@
 
 *.lo
 
-.*
-
 cppunit.xmL
 
 config.h
@@ -23,8 +17,6 @@ config.h
 config.log
 
 config.status
-
-test/testsuit
 
 *.log
 
@@ -36,8 +28,6 @@ test/testsuit
 
 *.a
 
-bcc/bcc
-
 autom4te.cache
 
 Makefile
@@ -46,10 +36,5 @@ stamp-h1
 
 .deps
 
-/nbproject
-
 /*~
 
-/*.gz
-
-src/testsuit
