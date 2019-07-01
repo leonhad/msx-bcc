@@ -1,7 +1,9 @@
 /out
-
+.sonar
+.scannerwork
+bcc/bcc
 *.gcov
-
+.dirstamp
 *.gcda
 
 *.gcno
@@ -9,6 +11,8 @@
 *.la
 
 *.lo
+.libs
+.DS_Store
 
 cppunit.xmL
 
