@@ -11,9 +11,9 @@
 *.md            text
 
 # Basic files
-*.txt   text eol=crlf
-*.bas   binary
-*.dsk   binary
+*.TXT   text eol=crlf
+*.BAS   binary
+*.DSK   binary
 
 # Sources
 *.[ch]  text diff=cpp
