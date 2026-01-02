@@ -10,6 +10,11 @@
 .gitignore      text
 *.md            text
 
+# Basic files
+*.txt   text eol=crlf
+*.bas   binary
+*.dsk   binary
+
 # Sources
 *.[ch]  text diff=cpp
 *.h     text diff=cpp
