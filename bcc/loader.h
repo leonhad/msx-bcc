@@ -22,7 +22,7 @@ namespace bc {
         char linebuffer[257];
         
     public:
-        Loader(string filein) throw(string);
+        Loader(string filein);
         ~Loader();
         char next();
         bool eof();

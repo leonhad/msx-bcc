@@ -3,7 +3,7 @@
 namespace bc
 {
     
-    Compiler::Compiler(string filein, string fileout) throw(string)
+    Compiler::Compiler(string filein, string fileout)
     {
         parser = new Parser(filein);
         analyze = new Analyze;
@@ -18,7 +18,7 @@ namespace bc
         if (analyze) delete analyze;
     }
     
-    void Compiler::run() throw(string)
+    void Compiler::run()
     {
         syntaxTree = parser->parse();
 

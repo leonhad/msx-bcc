@@ -1,8 +1,8 @@
-AC_PREREQ(2.61)
-AC_INIT([bcc], [0.0.1], [leonhad@gmail.com])
+AC_PREREQ([2.71])
+AC_INIT([bcc],[0.0.1],[leonhad@gmail.com])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([config.h.in])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_HOST
 case $host_os in
@@ -38,7 +38,7 @@ AC_LANG([C++])
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
+LT_INIT
 AM_PROG_AS
 AC_PROG_LN_S
 

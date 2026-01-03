@@ -18,9 +18,9 @@ private:
     CodeGen *codegen;
     
 public:
-    Compiler(string filein, string fileout) throw(string);
+    Compiler(string filein, string fileout);
     ~Compiler();
-    void run() throw(string);
+    void run();
 };
 
 }
