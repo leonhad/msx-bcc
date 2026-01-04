@@ -17,7 +17,8 @@ namespace bc {
                 fileout->flush();
                 fileout->close();
             }
-            delete fileout;
+
+            //delete fileout;
         }
     }
 
