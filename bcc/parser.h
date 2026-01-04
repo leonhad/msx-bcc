@@ -12,8 +12,6 @@
 
 #include <string>
 
-using namespace std;
-
 namespace bc {
     
     class Parser {

@@ -1,7 +1,6 @@
 #include "codegen.h"
 #include <iostream>
 #include <sstream>
-#include <cstdlib>
 
 namespace bc {
 
@@ -135,14 +134,14 @@ namespace bc {
     }
 
     void CodeGen::generateDeclare(TreeNode *tree) {
-        register unsigned int size;
+        unsigned int size;
         string name = tree->attr.name;
         if (tree->type == String) {
             name += "$";
         }
 
         if (tree->attr.op == DIM) {
-            register unsigned int size2;
+            unsigned int size2;
 
             size = atoi(tree->attr.val.c_str());
             size2 = atoi(tree->attr.val2.c_str());
@@ -185,7 +184,7 @@ namespace bc {
     }
 
     void CodeGen::emitSection(SectionType section) {
-        register char *_section;
+        char *_section;
 
         switch (section) {
             case S_RDATA:
@@ -213,13 +212,12 @@ namespace bc {
     }
 
     void CodeGen::generateVars(vector<SYMTAB *> symtabs) {
-        vector<SYMTAB *>::iterator i;
         string name;
-        register unsigned int size;
+        unsigned int size;
 
         emitAlign(8);
 
-        for (i = symtabs.begin(); i != symtabs.end(); i++) {
+        for (auto i = symtabs.begin(); i != symtabs.end(); ++i) {
             switch ((*i)->varType) {
                 case DimV:
                     size = (*i)->size1;
