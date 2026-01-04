@@ -1,9 +1,8 @@
-        .text
-        .align 4,0x90
+    .text
+    .align 4,0x90
 
-.globl _basic_exit
-_basic_exit:
-        xorq %rax, %rax
-        pushq %rax
-        call _exit
-        ret
+.globl _basic_end
+_basic_end:
+    mov $60, %rax
+    xor %rdi, %rdi
+    syscall

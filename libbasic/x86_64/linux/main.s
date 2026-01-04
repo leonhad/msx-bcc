@@ -1,15 +1,12 @@
-        .text
-        .align 4,0x90
+    .text
+    .align 4,0x90
 
-.globl _main
-_main:
-        pushq %rbp
-        movq %rsp, %rbp
-        subq $16, %rsp
+.globl _start
+_start:
+    pushq %rbp
+    movq %rsp, %rbp
 
-        //xor %edi, %edi
-        //call _basic_exit
-
-        xorq %rax, %rax
-        leave
-        ret
+    call _basic_start
+    call _basic_end
+    popq %rbp
+    ret

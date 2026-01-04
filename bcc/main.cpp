@@ -28,7 +28,7 @@ int main(const int argc, char *argv[]) {
 #error Unsupported platform
 #endif
 #elif __linux
-            assembly = "as -arch x86_64 -o ";
+            assembly = "as -march generic64 -o ";
             link = "ld -L. -lbasic ";
 #elif __unix // all unixes not caught above
 #error Unsupported platform
@@ -60,7 +60,7 @@ int main(const int argc, char *argv[]) {
             cout << "Compiling assembly... " << assembly << endl;
             system(assembly.c_str());
 
-            cout << "Linking..." << endl;
+            cout << "Linking... " << link << endl;
             system(link.c_str());
         } catch (string &err) {
             cerr << "bcc: " << err << endl;
