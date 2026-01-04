@@ -10,16 +10,19 @@ case $host_os in
 	HOST_LIBRARY="osx"
 	;;
  linux* )
-	HOST_LIBRARY="linux-$host_cpu"
+	HOST_LIBRARY="linux"
 	;;
  windows* )
-	HOST_LIBRARY="windows-$host_cpu"
+	HOST_LIBRARY="windows"
 	;;
  *)
 	AC_MSG_ERROR([Your platform is not currently  supported])
 	;;
 esac
 AC_SUBST([HOST_LIBRARY])
+
+HOST_CPU="$host_cpu"
+AC_SUBST([HOST_CPU])
 
 # Checks for programs.
 DEBUG_CFLAGS="-O2 -DNDEBUG"

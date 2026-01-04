@@ -4,7 +4,7 @@
 namespace bc {
     Attributes::Attributes()
     {
-        op = ERROR;
+        op = definitions::ERROR;
     }
     
     Attributes::~Attributes()

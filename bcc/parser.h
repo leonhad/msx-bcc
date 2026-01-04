@@ -1,15 +1,12 @@
 //
-// File:   parser.h
+// File: parser.h
 // Author: leonardo.costa
 //
 // Created on 8 de Setembro de 2006, 10:22
 //
-
 #ifndef _parser_H
 #define	_parser_H
 
-#include "loader.h"
-#include "globals.h"
 #include "treenode.h"
 #include "scan.h"
 
@@ -20,7 +17,6 @@ using namespace std;
 namespace bc {
     
     class Parser {
-    private:
         int line;
         int program_line;
         /* holds current token */
@@ -28,7 +24,7 @@ namespace bc {
         Scan *scan;
         
     public:
-        Parser(string filein);
+        explicit Parser(std::string filein);
         ~Parser();
         TreeNode *parse();
 

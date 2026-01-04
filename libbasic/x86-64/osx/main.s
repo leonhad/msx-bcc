@@ -8,3 +8,5 @@ _main:
 
         call _basic_start
         call _basic_end
+        popq %rbp
+        ret

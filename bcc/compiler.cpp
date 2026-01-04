@@ -6,16 +6,14 @@ namespace bc
     Compiler::Compiler(string filein, string fileout)
     {
         parser = new Parser(filein);
-        analyze = new Analyze;
         codegen = new CodeGen(filein, fileout);
-        syntaxTree = NULL;
+        syntaxTree = nullptr;
     }
     
     Compiler::~Compiler()
     {
         if (syntaxTree) delete syntaxTree;
         if (parser) delete parser;
-        if (analyze) delete analyze;
     }
     
     void Compiler::run()
@@ -23,7 +21,8 @@ namespace bc
         syntaxTree = parser->parse();
 
         //cout << "Building Symbol Table..." << endl;
-        vector<SYMTAB *> symtab = analyze->buildSymtab(syntaxTree);
+        Analyze analyze;
+        auto symtab = analyze.buildSymtab(syntaxTree);
 
         //cout << "Checking Types..." << endl;
         //typeCheck(syntaxTree);

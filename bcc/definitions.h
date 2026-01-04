@@ -10,8 +10,6 @@
 
 #include <string>
 
-using namespace std;
-
 namespace definitions {
     
     /* states in scanner DFA */
@@ -32,7 +30,7 @@ namespace definitions {
     };
     
     struct ReservedWords {
-        string str;
+        std::string str;
         TokenType tok;
     };
     

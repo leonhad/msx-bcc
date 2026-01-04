@@ -57,10 +57,10 @@ int main(const int argc, char *argv[]) {
             Compiler compiler(filein, fileout);
             compiler.run();
 
-            //cout << "Compiling assembly..." << endl;
+            cout << "Compiling assembly... " << assembly << endl;
             system(assembly.c_str());
 
-            //cout << "Linking..." << endl;
+            cout << "Linking..." << endl;
             system(link.c_str());
         } catch (string &err) {
             cerr << "bcc: " << err << endl;

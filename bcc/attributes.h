@@ -11,20 +11,18 @@
 #include "definitions.h"
 #include <string>
 
-using namespace definitions;
-
 namespace bc {
     class Attributes {
     public:
-        TokenType op;
+        definitions::TokenType op;
         std::string val;
         std::string val2;
         std::string name;
-        
+
         Attributes();
+
         ~Attributes();
     };
 }
 
 #endif	/* _ATTRIBUTES_H */
-

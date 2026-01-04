@@ -10,10 +10,11 @@ namespace bc {
     }
 
     Loader::~Loader() {
-        if (filein != NULL) {
+        if (filein) {
             if (filein->is_open()) {
                 filein->close();
             }
+
             delete filein;
         }
     }

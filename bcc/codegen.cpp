@@ -158,7 +158,7 @@ namespace bc {
             }
             *fileout << "\txorq %rax, %rax" << endl;
             *fileout << "\tmovq $" << size << ", %rcx" << endl;
-            *fileout << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
+            *fileout << "\tmovq _" << name << "(%rip), %rdx" << endl;
             *fileout << ".LC" << locals << ":" << endl;
             *fileout << "\tmovl %eax, (%edx)" << endl;
             *fileout << "\tloop .LC" << locals << endl;

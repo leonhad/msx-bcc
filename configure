@@ -716,6 +716,7 @@ CXXFLAGS
 CXX
 ENABLE_DEBUG_FALSE
 ENABLE_DEBUG_TRUE
+HOST_CPU
 HOST_LIBRARY
 host_os
 host_vendor
@@ -3574,15 +3575,18 @@ case $host_os in
 	HOST_LIBRARY="osx"
 	;;
  linux* )
-	HOST_LIBRARY="linux-$host_cpu"
+	HOST_LIBRARY="linux"
 	;;
  windows* )
-	HOST_LIBRARY="windows-$host_cpu"
+	HOST_LIBRARY="windows"
 	;;
  *)
 	as_fn_error $? "Your platform is not currently  supported" "$LINENO" 5
 	;;
 esac
+
+
+HOST_CPU="$host_cpu"
 
 
 # Checks for programs.

@@ -14,20 +14,17 @@
 #include "definitions.h"
 #include "symtab.h"
 
-using namespace std;
-
 namespace bc {
 
     class CodeGen {
-    private:
-        string filein;
-        string currentLine;
-        ofstream *fileout;
+        std::string filein;
+        std::string currentLine;
+        std::ofstream *fileout;
         unsigned int locals;
         unsigned int scope;
 
     public:
-        CodeGen(string filein, string fileout);
+        CodeGen(std::string filein, std::string fileout);
         ~CodeGen();
         void generate(TreeNode *syntaxTree, vector<SYMTAB *> symtabs);
 

@@ -2,7 +2,7 @@
 
 namespace bc
 {
-    TreeNode::TreeNode(NodeKind kind, unsigned int lineno)
+    TreeNode::TreeNode(definitions::NodeKind kind, unsigned int lineno)
     {
         sibling = NULL;
         nodekind = kind;
@@ -11,7 +11,7 @@ namespace bc
     
     TreeNode::~TreeNode()
     {
-        vector<TreeNode*>::iterator i;
+        std::vector<TreeNode*>::iterator i;
         for (i = child.begin(); i != child.end(); i++) {
             delete *i;
         }
