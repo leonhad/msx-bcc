@@ -46,45 +46,22 @@ namespace bc {
         // Program
         emitSection(S_TEXT);
         *fileout << "Ltext0:" << endl;
-        //emitAlign(2);
-        //*fileout << ".globl _basic_start" << endl;
 
         emitInitMethod("basic_start", 0);
-        //emitStabs("basic_start:F1", 36, 0, 0, "_basic_start");
-        //*fileout << "_basic_start:" << endl;
-        //*fileout << "\t.file 1 \"" << filein.c_str() << "\"" << endl;
-
         *fileout << "\tpush %rbp" << endl;
         *fileout << "\tmov %rsp, %rbp" << endl;
         emitBreakline();
 
-//        if (syntaxTree->child.size() > 0) {
-//            *fileout << "\tjmp _" << syntaxTree->child[0]->attr.val << endl;
-//        }
-
-        //*fileout << "Lend:" << endl;
-        //*fileout << "\tcall _basic_end" << endl;
-        emitBreakline();
-
-        //*fileout << "\tleave" << endl;
-        //*fileout << "\tret" << endl;
-        emitBreakline();
-
-        vector<TreeNode *>::iterator i;
-        for (i = syntaxTree->child.begin(); i != syntaxTree->child.end(); i++) {
+        for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i) {
             switch ((*i)->nodekind) {
                 case LineK:
                     emitInitMethod((*i)->attr.val.c_str(), (*i)->lineno + 1);
                     generateLine(*i);
 
-                    i++;
-                    if (i == syntaxTree->child.end()) {
+                    if ((i + 1) == syntaxTree->child.end()) {
                         *fileout << "\tleave" << endl;
                         *fileout << "\tret" << endl;
-                    } else {
-                        //*fileout << "\tjmp _" << (*i)->attr.val << endl;
                     }
-                    i--;
 
                     emitBreakline();
                     break;
@@ -97,12 +74,12 @@ namespace bc {
 
     void CodeGen::generateLine(TreeNode *tree) {
         ostringstream _tempLine;
-        _tempLine << "L" << locals; // << "-_" << tree->attr.val;
+        _tempLine << "L" << locals;
 
         *fileout << "L" << locals << ":" << endl;
         locals++;
         vector<TreeNode *>::iterator i;
-        for (i = tree->child.begin(); i != tree->child.end(); i++) {
+        for (i = tree->child.begin(); i != tree->child.end(); ++i) {
             switch ((*i)->nodekind) {
                 case DimK:
                     generateDim(*i);
@@ -135,20 +112,19 @@ namespace bc {
     }
 
     void CodeGen::generateDeclare(TreeNode *tree) {
-        unsigned int size;
         string name = tree->attr.name;
         if (tree->type == String) {
             name += "$";
         }
 
         if (tree->attr.op == DIM) {
-            unsigned int size2;
+            unsigned int size = atoi(tree->attr.val.c_str());
+            const unsigned int size2 = atoi(tree->attr.val2.c_str());
 
-            size = atoi(tree->attr.val.c_str());
-            size2 = atoi(tree->attr.val2.c_str());
             if (size2) {
                 size *= size2;
             }
+
             if (tree->type == String) {
                 // String size
                 size *= 256;

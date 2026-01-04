@@ -45,3 +45,5 @@ stamp-h1
 build
 
 .idea
+
+/samples/*.s
