@@ -17004,7 +17004,7 @@ fi
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile bcc/Makefile libbasic/Makefile libbasic/ARM/Makefile libbasic/x86-64/Makefile"
+ac_config_files="$ac_config_files Makefile bcc/Makefile libbasic/Makefile libbasic/ARM/Makefile libbasic/x86_32/Makefile libbasic/x86_64/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18128,7 +18128,8 @@ do
     "bcc/Makefile") CONFIG_FILES="$CONFIG_FILES bcc/Makefile" ;;
     "libbasic/Makefile") CONFIG_FILES="$CONFIG_FILES libbasic/Makefile" ;;
     "libbasic/ARM/Makefile") CONFIG_FILES="$CONFIG_FILES libbasic/ARM/Makefile" ;;
-    "libbasic/x86-64/Makefile") CONFIG_FILES="$CONFIG_FILES libbasic/x86-64/Makefile" ;;
+    "libbasic/x86_32/Makefile") CONFIG_FILES="$CONFIG_FILES libbasic/x86_32/Makefile" ;;
+    "libbasic/x86_64/Makefile") CONFIG_FILES="$CONFIG_FILES libbasic/x86_64/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

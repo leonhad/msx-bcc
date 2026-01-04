@@ -51,6 +51,7 @@ AC_CONFIG_FILES([Makefile
                  bcc/Makefile
                  libbasic/Makefile
                  libbasic/ARM/Makefile
-                 libbasic/x86-64/Makefile
+                 libbasic/x86_32/Makefile
+                 libbasic/x86_64/Makefile
 ])
 AC_OUTPUT
