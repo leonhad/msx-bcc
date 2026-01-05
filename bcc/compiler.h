@@ -13,7 +13,7 @@ class Compiler {
     CodeGen *codegen;
     
 public:
-    Compiler(string filein, string fileout);
+    Compiler(std::string filein, std::string fileout);
     ~Compiler();
     void run();
 };

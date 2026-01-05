@@ -2,6 +2,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace definitions;
 
 namespace bc {
 
@@ -115,15 +116,14 @@ namespace bc {
 
     TokenType Scan::getToken() {
         tokenString.erase();
-        /* holds current token to be returned */
-        TokenType currentToken;
-        /* current state - always begins at START */
+        /* holds the current token to be returned */
+        TokenType currentToken{};
+        /* the current state always begins at START */
         StateType state = START;
         /* flag to indicate save to tokenString */
-        bool save;
         while (state != DONE) {
-            int c = getNextChar();
-            save = true;
+            const int c = getNextChar();
+            bool save = true;
             switch (state) {
                 case START:
                     if (isdigit(c)) {

@@ -6,15 +6,15 @@
 //
 
 #ifndef _tokens_H
-#define	_tokens_H
+#define _tokens_H
 
 #include <string>
 
 using namespace std;
 
-namespace bc {
-    
+namespace bc
+{
+
 }
 
-#endif	/* _tokens_H */
-
+#endif /* _tokens_H */

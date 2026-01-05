@@ -68,5 +68,6 @@ int main(const int argc, char *argv[]) {
             cerr << "bcc: Unknown error!" << endl;
         }
     }
+
     return EXIT_SUCCESS;
 }

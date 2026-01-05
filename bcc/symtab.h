@@ -6,49 +6,46 @@
 //
 
 #ifndef _SYMTAB_H
-#define	_SYMTAB_H
+#define _SYMTAB_H
+
+#include <string>
+#include <vector>
 
 #include "attributes.h"
-#include <vector>
-#include <string>
-
-using namespace definitions;
-using namespace std;
 
 namespace bc
 {
-    enum VarType {
+    enum VarType
+    {
         DimV,
         VarV
     };
-    
+
     typedef struct
     {
-        string name;
+        std::string name;
         VarType varType;
-        ExpType expType;
-        vector<unsigned int> lines;
+        definitions::ExpType expType;
+        std::vector<unsigned int> lines;
         unsigned int memloc;
         unsigned int size1;
         unsigned int size2;
     } SYMTAB;
-    
+
     class Symtab
     {
-    private:
         unsigned int location;
-        vector<SYMTAB *> symtab;
-        
-    public:
+        std::vector<SYMTAB *> symtab;
+
+      public:
         Symtab();
         ~Symtab();
-        
-        void insert(const char * name, VarType varType, ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
-        bool lookup(const char * name, ExpType expType);
-        
-        vector<SYMTAB *> getSymtab();
+
+        void insert(const char *name, VarType varType, definitions::ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
+        bool lookup(const char *name, definitions::ExpType expType);
+
+        std::vector<SYMTAB *> getSymtab();
     };
-}
+} // namespace bc
 
-#endif	/* _SYMTAB_H */
-
+#endif /* _SYMTAB_H */

@@ -6,7 +6,7 @@
 //
 
 #ifndef _CODEGEN_H
-#define	_CODEGEN_H
+#define _CODEGEN_H
 
 #include <fstream>
 #include <string>
@@ -16,32 +16,33 @@
 
 namespace bc {
 
-    class CodeGen {
-        std::string filein;
-        std::string currentLine;
-        std::ofstream *fileout;
-        unsigned int locals;
-        unsigned int scope;
+  class CodeGen
+  {
+    std::string filein;
+    std::string currentLine;
+    std::ofstream *fileout;
+    unsigned int locals;
+    unsigned int scope;
 
-    public:
-        CodeGen(std::string filein, std::string fileout);
-        ~CodeGen();
-        void generate(TreeNode *syntaxTree, vector<SYMTAB *> symtabs);
+  public:
+    CodeGen (std::string filein, std::string fileout);
+    ~CodeGen ();
+    void generate (TreeNode *syntaxTree, std::vector<SYMTAB *> symtabs);
 
-    private:
-        void emitFile(const char *file);
-        void emitVersion();
-        void emitBreakline();
-        void emitAlign(int align);
-        void emitComment(const char *comment);
-        void emitSection(SectionType section);
-        void emitInitMethod(const char *name, unsigned int line);
-        void generateVars(vector<SYMTAB *> symtabs);
-        void generateLine(TreeNode *tree);
-        void generateDim(TreeNode *tree);
-        void generateDeclare(TreeNode *tree);
-        void generatePrint(TreeNode *tree);
-    };
-}
+  private:
+    void emitFile (const char *file);
+    void emitVersion ();
+    void emitBreakline ();
+    void emitAlign (int align);
+    void emitComment (const char *comment);
+    void emitSection (definitions::SectionType section);
+    void emitInitMethod (const char *name, unsigned int line);
+    void generateVars (std::vector<SYMTAB *> symtabs);
+    void generateLine (TreeNode *tree);
+    void generateDim (TreeNode *tree);
+    void generateDeclare (TreeNode *tree);
+    void generatePrint (TreeNode *tree);
+  };
+} // namespace bc
 
-#endif	/* _CODEGEN_H */
+#endif /* _CODEGEN_H */

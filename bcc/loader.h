@@ -8,21 +8,17 @@
 #ifndef _parse_H
 #define	_parse_H
 
-#include <iostream>
 #include <fstream>
 #include <string>
-
-using namespace std;
 
 namespace bc {
     
     class Loader {
-    private:
-        ifstream *filein;
+        std::ifstream *filein;
         char linebuffer[257];
         
     public:
-        Loader(string filein);
+        explicit Loader(std::string filein);
         ~Loader();
         char next();
         bool eof();

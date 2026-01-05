@@ -11,24 +11,24 @@
 #include "treenode.h"
 #include "symtab.h"
 
-namespace bc
-{
-    class Analyze
-    {
-    private:
+namespace bc {
+    class Analyze {
         Symtab *symtab;
-        
+
     public:
         Analyze();
+
         ~Analyze();
-        vector<SYMTAB *> buildSymtab(TreeNode * syntaxTree);
-        
+
+        std::vector<SYMTAB *> buildSymtab(TreeNode *syntaxTree);
+
     private:
-        void traverse(TreeNode * treeNode, void (Analyze::* preProc)(TreeNode *), void (Analyze::* postProc)(TreeNode *));
-        void insertNode(TreeNode * treeNode);
-        void nullProc(TreeNode * treeNode);
+        void traverse(TreeNode *treeNode, void (Analyze::*preProc)(TreeNode *) const, void (Analyze::*postProc)(TreeNode *));
+
+        void insertNode(TreeNode *treeNode) const;
+
+        void nullProc(TreeNode *treeNode);
     };
 }
 
 #endif	/* _ANALYZE_H */
-

@@ -2,6 +2,9 @@
 #include "treenode.h"
 #include <cstdlib>
 
+using namespace std;
+using namespace definitions;
+
 namespace bc {
 
     Analyze::Analyze() {
@@ -21,13 +24,11 @@ namespace bc {
 
     }
 
-    void Analyze::insertNode(TreeNode * treeNode) {
-        vector<TreeNode *>::iterator i;
-
+    void Analyze::insertNode(TreeNode * treeNode) const {
         switch (treeNode->nodekind) {
             case DimK:
-                for (i = treeNode->child.begin(); i != treeNode->child.end(); i++) {
-                    symtab->insert((*i)->attr.name.c_str(), DimV, (*i)->type, (*i)->lineno, atoi((*i)->attr.val.c_str()), atoi((*i)->attr.val2.c_str()));
+                for (const auto & i : treeNode->child) {
+                    symtab->insert(i->attr.name.c_str(), DimV, i->type, i->lineno, atoi(i->attr.val.c_str()), atoi(i->attr.val2.c_str()));
                 }
                 break;
             default:
@@ -35,12 +36,11 @@ namespace bc {
         }
     }
 
-    void Analyze::traverse(TreeNode * treeNode, void (Analyze::* preProc)(TreeNode *), void (Analyze::* postProc)(TreeNode *)) {
-        vector<TreeNode *>::iterator i;
+    void Analyze::traverse(TreeNode * treeNode, void (Analyze::* preProc)(TreeNode *) const, void (Analyze::* postProc)(TreeNode *)) {
         if (treeNode) {
             (this->*preProc)(treeNode);
 
-            for (i = treeNode->child.begin(); i != treeNode->child.end(); i++) {
+            for (auto i = treeNode->child.begin(); i != treeNode->child.end(); ++i) {
                 traverse(*i, preProc, postProc);
             }
             (this->*postProc)(treeNode);

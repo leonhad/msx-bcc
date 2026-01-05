@@ -1,0 +1,4 @@
+BasedOnStyle: Microsoft
+
+ColumnLimit: 200
+NamespaceIndentation: All

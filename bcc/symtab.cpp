@@ -1,6 +1,9 @@
 #include "symtab.h"
 #include <iostream>
 
+using namespace std;
+using namespace definitions;
+
 namespace bc
 {
     Symtab::Symtab()

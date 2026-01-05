@@ -2,12 +2,7 @@
 #include <cstdlib>
 
 namespace bc {
-    Attributes::Attributes()
-    {
-        op = definitions::ERROR;
-    }
-    
-    Attributes::~Attributes()
-    {
-    }
-}
+Attributes::Attributes () { op = definitions::ERROR; }
+
+Attributes::~Attributes () {}
+} // namespace bc

@@ -17,7 +17,7 @@ namespace definitions {
         START, INNUM, INID, INSTRING, DONE
     };
     
-    /** book-keeping tokens */
+    /** bookkeeping tokens */
     enum TokenType {
         ENDFILE, ERROR, ENDLINE, ENDCOMMAND,
         /* reserved words */

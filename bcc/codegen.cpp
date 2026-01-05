@@ -2,6 +2,9 @@
 #include <iostream>
 #include <sstream>
 
+using namespace std;
+using namespace definitions;
+
 namespace bc {
 
     CodeGen::CodeGen(string filein, string fileout) {

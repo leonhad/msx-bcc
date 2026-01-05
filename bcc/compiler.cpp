@@ -3,7 +3,7 @@
 namespace bc
 {
     
-    Compiler::Compiler(string filein, string fileout)
+    Compiler::Compiler(std::string filein, std::string fileout)
     {
         parser = new Parser(filein);
         codegen = new CodeGen(filein, fileout);

@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 namespace bc {
-    Loader::Loader(string filename) {
-        filein = new ifstream(filename.c_str());
+    Loader::Loader(std::string filename) {
+        filein = new std::ifstream(filename.c_str());
         if (!filein->is_open()) {
-            throw string("arquivo " + filename + " nao encontrado!");
+            throw std::string("arquivo " + filename + " nao encontrado!");
         }
     }
 
