@@ -1,14 +1,19 @@
-#include <iostream>
 #include "compiler.h"
+#include <iostream>
 
 using namespace bc;
 using namespace std;
 
-int main(const int argc, char *argv[]) {
-    if (argc != 2) {
+int main(const int argc, char *argv[])
+{
+    if (argc != 2)
+    {
         cout << argv[0] << ": no input files" << endl;
-    } else {
-        try {
+    }
+    else
+    {
+        try
+        {
             string filein = argv[1];
             string fileout;
             string assembly;
@@ -36,12 +41,14 @@ int main(const int argc, char *argv[]) {
 #error Unsupported platform
 #endif
 
-            if (filein.find('.') == string::npos) {
+            if (filein.find('.') == string::npos)
+            {
                 filein += ".bas";
             }
 
             size_t pos = filein.rfind('.');
-            if (pos != string::npos) {
+            if (pos != string::npos)
+            {
                 fileout = filein.substr(0, pos);
                 assembly += fileout;
                 assembly += ".o ";
@@ -51,7 +58,9 @@ int main(const int argc, char *argv[]) {
                 link += " ";
                 fileout += ".s";
                 assembly += fileout;
-            } else {
+            }
+            else
+            {
                 throw string("Fail to determine output file");
             }
             Compiler compiler(filein, fileout);
@@ -62,9 +71,13 @@ int main(const int argc, char *argv[]) {
 
             cout << "Linking... " << link << endl;
             system(link.c_str());
-        } catch (string &err) {
+        }
+        catch (string &err)
+        {
             cerr << "bcc: " << err << endl;
-        } catch (...) {
+        }
+        catch (...)
+        {
             cerr << "bcc: Unknown error!" << endl;
         }
     }

@@ -1,26 +1,20 @@
-//
-// File: scan.h
-// Author: leonardo.costa
-//
-// Created on 12 de Setembro de 2006, 14:03
-//
-
-#ifndef _scan_H
-#define	_scan_H
+#pragma once
 
 #include "analyze.h"
 #include <fstream>
-#include <string>
 #include <map>
+#include <string>
 
-namespace bc {
-    class Scan {
+namespace bc
+{
+    class Scan
+    {
         std::fstream *filein;
         unsigned int lineno;
         int current;
         std::map<std::string, definitions::TokenType> reservedWords;
 
-    public:
+      public:
         explicit Scan(std::string filein);
 
         ~Scan();
@@ -39,6 +33,4 @@ namespace bc {
 
         unsigned int getLineno();
     };
-}
-
-#endif	/* _scan_H */
+} // namespace bc

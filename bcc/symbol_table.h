@@ -1,12 +1,5 @@
-//
-// File:   symtab.h
-// Author: p922221
-//
-// Created on 2 de Abril de 2008, 15:01
-//
-
-#ifndef _SYMTAB_H
-#define _SYMTAB_H
+#ifndef SYMTAB_H
+#define SYMTAB_H
 
 #include <string>
 #include <vector>
@@ -30,22 +23,20 @@ namespace bc
         unsigned int memloc;
         unsigned int size1;
         unsigned int size2;
-    } SYMTAB;
+    } SYMBOL_TABLE;
 
-    class Symtab
+    class SymbolTable
     {
         unsigned int location;
-        std::vector<SYMTAB *> symtab;
+        std::vector<SYMBOL_TABLE> symtab;
 
       public:
-        Symtab();
-        ~Symtab();
-
+        SymbolTable();
         void insert(const char *name, VarType varType, definitions::ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
         bool lookup(const char *name, definitions::ExpType expType);
 
-        std::vector<SYMTAB *> getSymtab();
+        std::vector<SYMBOL_TABLE> getSymtab();
     };
 } // namespace bc
 
-#endif /* _SYMTAB_H */
+#endif /* SYMTAB_H */

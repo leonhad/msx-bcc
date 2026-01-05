@@ -1,40 +1,70 @@
-// 
-// File:   definitions.h
-// Author: p922221
-//
-// Created on 1 de Abril de 2008, 14:24
-//
-
-#ifndef _DEFINITIONS_H
-#define	_DEFINITIONS_H
+#pragma once
 
 #include <string>
 
-namespace definitions {
-    
+namespace definitions
+{
+
     /* states in scanner DFA */
-    enum StateType {
-        START, INNUM, INID, INSTRING, DONE
+    enum StateType
+    {
+        START,
+        INNUM,
+        INID,
+        INSTRING,
+        DONE
     };
-    
+
     /** bookkeeping tokens */
-    enum TokenType {
-        ENDFILE, ERROR, ENDLINE, ENDCOMMAND,
+    enum TokenType
+    {
+        ENDFILE,
+        ERROR,
+        ENDLINE,
+        ENDCOMMAND,
         /* reserved words */
-        DATA, DIM, ELSE, FOR, IF, NEXT, THEN, TO, END, PRINT,
+        DATA,
+        DIM,
+        ELSE,
+        FOR,
+        IF,
+        NEXT,
+        THEN,
+        TO,
+        END,
+        PRINT,
         /* multicharacter tokens */
-        ID, NUM, STRING,
+        ID,
+        NUM,
+        STRING,
         /* special symbols */
-        EQ, GT, LT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI,
-	CIFRAO, PERCENT, ASSIGN, COMMA, LBRACET, RBRACET, DOLLAR
+        EQ,
+        GT,
+        LT,
+        PLUS,
+        MINUS,
+        TIMES,
+        OVER,
+        LPAREN,
+        RPAREN,
+        SEMI,
+        CIFRAO,
+        PERCENT,
+        ASSIGN,
+        COMMA,
+        LBRACET,
+        RBRACET,
+        DOLLAR
     };
-    
-    struct ReservedWords {
+
+    struct ReservedWords
+    {
         std::string str;
         TokenType tok;
     };
-    
-    enum NodeKind {
+
+    enum NodeKind
+    {
         ProgramK,
         LineK,
         StmtK,
@@ -47,26 +77,26 @@ namespace definitions {
         EndK,
         PrintK
     };
-    
-    enum ExpKind {
+
+    enum ExpKind
+    {
         OpK,
         ConstK,
         IdK
     };
-    
+
     /* ExpType is used for type checking */
-    enum ExpType {
+    enum ExpType
+    {
         Integer,
         String
     };
-    
-    enum SectionType {
+
+    enum SectionType
+    {
         S_RDATA,
         S_DATA,
         S_BSS,
         S_TEXT
     };
-}
-
-#endif	/* _DEFINITIONS_H */
-
+} // namespace definitions

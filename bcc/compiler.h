@@ -1,23 +1,22 @@
-#ifndef _compiler_H
-#define	_compiler_H
+#pragma once
 
-#include <string>
-#include "parser.h"
 #include "codegen.h"
+#include "parser.h"
+#include <string>
 
-namespace bc {
-    
-class Compiler {
-    Parser *parser;
-    TreeNode *syntaxTree;
-    CodeGen *codegen;
-    
-public:
-    Compiler(std::string filein, std::string fileout);
-    ~Compiler();
-    void run();
-};
+namespace bc
+{
 
-}
+    class Compiler
+    {
+        Parser *parser;
+        TreeNode *syntaxTree;
+        CodeGen *codegen;
 
-#endif
+      public:
+        Compiler(std::string filein, std::string fileout);
+        ~Compiler();
+        void run();
+    };
+
+} // namespace bc
