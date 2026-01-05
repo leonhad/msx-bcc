@@ -5,8 +5,8 @@
 // Created on 1 de Abril de 2008, 14:21
 //
 
-#ifndef _ATTRIBUTES_H
-#define	_ATTRIBUTES_H
+#ifndef ATTRIBUTES_H
+#define	ATTRIBUTES_H
 
 #include "definitions.h"
 #include <string>
@@ -25,4 +25,4 @@ namespace bc {
     };
 }
 
-#endif	/* _ATTRIBUTES_H */
+#endif	/* ATTRIBUTES_H */

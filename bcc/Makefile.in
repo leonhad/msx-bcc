@@ -109,7 +109,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_bcc_OBJECTS = analyze.$(OBJEXT) attributes.$(OBJEXT) \
 	codegen.$(OBJEXT) compiler.$(OBJEXT) loader.$(OBJEXT) \
 	main.$(OBJEXT) parser.$(OBJEXT) scan.$(OBJEXT) \
-	symtab.$(OBJEXT) treenode.$(OBJEXT) util.$(OBJEXT)
+	symtab.$(OBJEXT) treenode.$(OBJEXT)
 bcc_OBJECTS = $(am_bcc_OBJECTS)
 bcc_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -135,8 +135,7 @@ am__depfiles_remade = ./$(DEPDIR)/analyze.Po ./$(DEPDIR)/attributes.Po \
 	./$(DEPDIR)/codegen.Po ./$(DEPDIR)/compiler.Po \
 	./$(DEPDIR)/loader.Po ./$(DEPDIR)/main.Po \
 	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scan.Po \
-	./$(DEPDIR)/symtab.Po ./$(DEPDIR)/treenode.Po \
-	./$(DEPDIR)/util.Po
+	./$(DEPDIR)/symtab.Po ./$(DEPDIR)/treenode.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -313,10 +312,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 bcc_SOURCES = analyze.cpp attributes.cpp codegen.cpp compiler.cpp loader.cpp \
-    main.cpp parser.cpp scan.cpp symtab.cpp treenode.cpp util.cpp
+    main.cpp parser.cpp scan.cpp symtab.cpp treenode.cpp
 
 noinst_HEADERS = analyze.h attributes.h codegen.h compiler.h definitions.h \
-    globals.h loader.h parser.h scan.h symtab.h treenode.h util.h
+    globals.h loader.h parser.h scan.h symtab.h treenode.h
 
 all: all-am
 
@@ -421,7 +420,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symtab.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/treenode.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -595,7 +593,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f ./$(DEPDIR)/symtab.Po
 	-rm -f ./$(DEPDIR)/treenode.Po
-	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -651,7 +648,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f ./$(DEPDIR)/symtab.Po
 	-rm -f ./$(DEPDIR)/treenode.Po
-	-rm -f ./$(DEPDIR)/util.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

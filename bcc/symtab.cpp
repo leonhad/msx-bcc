@@ -8,26 +8,27 @@ namespace bc
 {
     Symtab::Symtab()
     {
-        
     }
+
     Symtab::~Symtab()
     {
-        vector<SYMTAB *>::iterator i;
-        for (i = symtab.begin(); i != symtab.end(); i++) {
-            delete (*i);
+        for (const auto &i : symtab)
+        {
+            delete i;
         }
     }
-    
-    void Symtab::insert(const char * name, VarType varType, ExpType expType, unsigned int lineno, unsigned int size1, unsigned int size2)
+
+    void Symtab::insert(const char *name, VarType varType, ExpType expType, unsigned int lineno, unsigned int size1, unsigned int size2)
     {
-        if (lookup(name, expType)) {
+        if (lookup(name, expType))
+        {
             string msg;
             msg += "Var ";
             msg += name;
             msg += " already defined";
             throw msg;
         }
-        
+
         SYMTAB *sym = new SYMTAB;
         sym->name = name;
         sym->varType = varType;
@@ -37,21 +38,23 @@ namespace bc
         sym->lines.push_back(lineno);
         symtab.push_back(sym);
     }
-    
-    bool Symtab::lookup(const char * name, ExpType expType)
+
+    bool Symtab::lookup(const char *name, ExpType expType)
     {
-        register bool ret = false;
-        vector<SYMTAB *>::iterator i;
-        for (i = symtab.begin(); i != symtab.end(); i++) {
-            if ((*i)->name == name && (*i)->expType == expType) {
+        bool ret = false;
+
+        for (const auto &i : symtab)
+        {
+            if (i->name == name && i->expType == expType)
+            {
                 ret = true;
             }
         }
         return ret;
     }
-    
+
     vector<SYMTAB *> Symtab::getSymtab()
     {
         return symtab;
     }
-}
+} // namespace bc
