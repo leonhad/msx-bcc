@@ -24,4 +24,4 @@ namespace bc
         definitions::ExpType type;
     };
 
-} // namespace bc
+}

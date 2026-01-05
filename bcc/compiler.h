@@ -6,17 +6,23 @@
 
 namespace bc
 {
-
     class Compiler
     {
         Parser *parser;
         TreeNode *syntaxTree;
         CodeGen *codegen;
 
+        std::string fileout;
+        std::string filein;
+        std::string fileAssembly;
+
       public:
-        Compiler(std::string filein, std::string fileout);
+        Compiler(const char *filein, const char *fileout);
         ~Compiler();
         void run();
+
+      private:
+        void compile() const;
     };
 
-} // namespace bc
+}

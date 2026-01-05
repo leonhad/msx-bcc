@@ -1,12 +1,29 @@
 #include "compiler.h"
+#include "file_names.h"
+#include "messages.h"
+#include <string>
+
+using namespace std;
 
 namespace bc
 {
-
-    Compiler::Compiler(std::string filein, std::string fileout)
+    Compiler::Compiler(const char *filein, const char *fileout)
     {
-        parser = new Parser(filein);
-        codegen = new CodeGen(filein, fileout);
+        this->filein = filein;
+        if (this->filein.find('.') == string::npos)
+        {
+            this->filein += ".bas";
+        }
+
+        if (!fileout)
+        {
+            this->fileout = get_executable_name(remove_extension(filein).c_str());
+        }
+
+        fileAssembly = get_assembly_name(remove_extension(filein).c_str());
+
+        parser = new Parser(this->filein);
+        codegen = new CodeGen(this->filein, this->fileAssembly);
         syntaxTree = nullptr;
     }
 
@@ -20,15 +37,57 @@ namespace bc
     {
         syntaxTree = parser->parse();
 
-        // cout << "Building Symbol Table..." << endl;
+        debug("building symbol table...");
         Analyze analyze;
-        auto symtab = analyze.buildSymbolTable(syntaxTree);
+        const auto symbols = analyze.buildSymbolTable(syntaxTree);
 
-        // cout << "Checking Types..." << endl;
+        //debug("Checking Types...");
         // typeCheck(syntaxTree);
-        // cout << "Type Checking Finished" << endl;
-        // cout << "Generating assembly code..." << endl;
-        codegen->generate(syntaxTree, symtab);
+        // debug("Type Checking Finished");
+
+        debug("generating assembly code...");
+        codegen->generate(syntaxTree, symbols);
+
+        compile();
     }
 
-} // namespace bc
+    void Compiler::compile() const
+    {
+        string assembly;
+        string link;
+
+#ifdef _WIN64
+#error Unsupported platform
+#elif _WIN32
+#error Unsupported platform
+#elif __APPLE__
+#include "TargetConditionals.h"
+
+#if TARGET_OS_MAC
+        assembly = "as -arch x86_64 -o ";
+        link = "ld -L. -lSystem -lbasic /usr/lib/crt1.o -macosx_version_min 10.6 ";
+#else
+#error Unsupported platform
+#endif
+#elif __linux
+        assembly = "as -march generic64 -o ";
+        link = "ld -L. -lbasic ";
+#elif __unix // all unixes not caught above
+#error Unsupported platform
+#elif __posix
+#error Unsupported platform
+#endif
+
+        const auto name = remove_extension(filein.c_str());
+        const auto object = add_extension(name.c_str(), "o");
+
+        assembly += object + " " + get_assembly_name(name.c_str());
+        link += object + " -o " + fileout;
+
+        debug(assembly);
+        system(assembly.c_str());
+
+        debug(link);
+        system(link.c_str());
+    }
+}
