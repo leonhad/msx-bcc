@@ -2,7 +2,7 @@
 
 #include <exception>
 
-unsigned int toInt(const std::string &str)
+unsigned int to_int(const std::string &str)
 {
     unsigned int ret = 0;
     try

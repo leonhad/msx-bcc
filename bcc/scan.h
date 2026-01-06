@@ -9,28 +9,28 @@ namespace bc
 {
     class Scan
     {
-        std::fstream *filein;
+        std::fstream filein;
         unsigned int lineno;
         int current;
-        std::map<std::string, definitions::TokenType> reservedWords;
+        std::map<std::string, definitions::TokenType> reserved_words;
 
       public:
-        explicit Scan(std::string filein);
+        explicit Scan(const std::string &filein);
 
         ~Scan();
 
-        definitions::TokenType getToken();
+        definitions::TokenType next_token();
 
-        char getNextChar();
+        char next_char();
 
-        void ungetNextChar();
+        void unget_char();
 
-        definitions::TokenType reservedLookup(std::string s);
+        definitions::TokenType reserved_lookup(const std::string &name);
 
-        definitions::TokenType getSpecialChar(char c);
+        static definitions::TokenType get_special_char(char check_char);
 
-        std::string tokenString;
+        std::string token_string;
 
-        unsigned int getLineno();
+        unsigned int current_line_number() const;
     };
-} // namespace bc
+}

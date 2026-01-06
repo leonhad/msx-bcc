@@ -7,34 +7,27 @@ using namespace definitions;
 namespace bc
 {
 
-    Parser::Parser(string filein)
+    Parser::Parser(const string &file_input) : line{EOF}, program_line{EOF}, current_token{END_FILE}, scan{file_input}
     {
-        scan = new Scan(filein);
     }
 
-    Parser::~Parser()
+    void Parser::match(const TokenType expected)
     {
-        if (scan)
-            delete scan;
-    }
-
-    void Parser::match(TokenType expected)
-    {
-        if (token == expected)
+        if (current_token == expected)
         {
-            token = scan->getToken();
+            current_token = scan.next_token();
         }
         else
         {
-            cerr << "unexpected token: " << token << " " << scan->tokenString << endl;
+            cerr << "unexpected token: " << current_token << " " << scan.token_string << endl;
         }
     }
 
     TreeNode *Parser::parse()
     {
-        const auto treeNode = new TreeNode{ProgramK, 0};
+        const auto treeNode = new TreeNode{PROGRAM_K, 0};
 
-        while ((token = scan->getToken()) != ENDFILE)
+        while ((current_token = scan.next_token()) != END_FILE)
         {
             treeNode->add_child(line_sequence());
         }
@@ -44,13 +37,13 @@ namespace bc
 
     TreeNode *Parser::line_sequence()
     {
-        const auto current_line = new TreeNode{LineK, scan->getLineno()};
-        current_line->attr.val = scan->tokenString;
+        const auto current_line = new TreeNode{LINE_K, scan.current_line_number()};
+        current_line->attr.value = scan.token_string;
         match(NUM);
 
         while (true)
         {
-            switch (token)
+            switch (current_token)
             {
             case DIM:
                 current_line->add_child(dim_sequence());
@@ -64,18 +57,18 @@ namespace bc
             case ID:
                 current_line->add_child(assign_sequence());
                 break;
-            case ENDLINE:
+            case END_LINE:
                 break;
             default:
-                cerr << "invalid token: " << token << " '" << scan->tokenString << "'" << endl;
-                while (token != ENDLINE && token != ENDFILE && token != ERROR && token != ENDCOMMAND)
+                cerr << "invalid token: " << current_token << " '" << scan.token_string << "'" << endl;
+                while (current_token != END_LINE && current_token != END_FILE && current_token != ERROR && current_token != END_COMMAND)
                 {
-                    token = scan->getToken();
+                    current_token = scan.next_token();
                 }
             }
-            if (token == ENDCOMMAND)
+            if (current_token == END_COMMAND)
             {
-                match(ENDCOMMAND);
+                match(END_COMMAND);
             }
             else
             {
@@ -88,18 +81,18 @@ namespace bc
 
     TreeNode *Parser::assign_sequence()
     {
-        const auto assign = new TreeNode{AssignK, scan->getLineno()};
-        assign->attr.name = scan->tokenString;
+        const auto assign = new TreeNode{ASSIGN_K, scan.current_line_number()};
+        assign->attr.name = scan.token_string;
         match(ID);
 
-        if (token == DOLLAR)
+        if (current_token == DOLLAR)
         {
-            assign->type = String;
+            assign->type = STRING_T;
             match(DOLLAR);
         }
         else
         {
-            assign->type = Numeric;
+            assign->type = NUMERIC_T;
         }
         match(EQ);
         assign->add_child(exp_sequence());
@@ -109,21 +102,21 @@ namespace bc
 
     TreeNode *Parser::exp_sequence()
     {
-        const auto exp = new TreeNode{ExpK, scan->getLineno()};
+        const auto exp = new TreeNode{EXPRESSION_K, scan.current_line_number()};
 
-        if (token == MINUS || token == PLUS)
+        if (current_token == MINUS || current_token == PLUS)
         {
-            exp->attr.op = token;
-            match(token);
+            exp->attr.operation = current_token;
+            match(current_token);
         }
-        if (token == NUM)
+        if (current_token == NUM)
         {
-            exp->attr.val = scan->tokenString;
-            exp->kind = ConstK;
+            exp->attr.value = scan.token_string;
+            exp->kind = CONSTANT_K;
         }
-        if (token == ID)
+        if (current_token == ID)
         {
-            exp->attr.val = scan->tokenString;
+            exp->attr.value = scan.token_string;
         }
 
         return exp;
@@ -131,14 +124,14 @@ namespace bc
 
     TreeNode *Parser::end_sequence()
     {
-        const auto end = new TreeNode{EndK, scan->getLineno()};
+        const auto end = new TreeNode{END_K, scan.current_line_number()};
         match(END);
         return end;
     }
 
     TreeNode *Parser::print_sequence()
     {
-        const auto print = new TreeNode{PrintK, scan->getLineno()};
+        const auto print = new TreeNode{PRINT_K, scan.current_line_number()};
         match(PRINT);
 
         // FIXME add more expressions in print
@@ -147,7 +140,7 @@ namespace bc
         {
             if (!first)
             {
-                if (token == SEMI)
+                if (current_token == SEMI)
                 {
                     match(SEMI);
                 }
@@ -158,14 +151,14 @@ namespace bc
             }
 
             first = false;
-        } while (token != ENDLINE && token != ERROR && token != ENDFILE && token != ENDCOMMAND && token == COMMA);
+        } while (current_token != END_LINE && current_token != ERROR && current_token != END_FILE && current_token != END_COMMAND && current_token == COMMA);
 
         return print;
     }
 
     TreeNode *Parser::dim_sequence()
     {
-        const auto dim = new TreeNode{DimK, scan->getLineno()};
+        const auto dim = new TreeNode{DIM_K, scan.current_line_number()};
         match(DIM);
         bool first = true;
         do
@@ -174,36 +167,37 @@ namespace bc
             {
                 match(COMMA);
             }
+
             dim->add_child(declare_sequence());
             first = false;
-        } while (token != ENDLINE && token != ERROR && token != ENDFILE && token != ENDCOMMAND && token == COMMA);
+        } while (current_token != END_LINE && current_token != ERROR && current_token != END_FILE && current_token != END_COMMAND && current_token == COMMA);
         return dim;
     }
 
     TreeNode *Parser::declare_sequence()
     {
-        const auto declare = new TreeNode{DeclareK, scan->getLineno()};
-        declare->attr.op = DIM;
-        declare->attr.name = scan->tokenString;
+        const auto declare = new TreeNode{DECLARE_K, scan.current_line_number()};
+        declare->attr.operation = DIM;
+        declare->attr.name = scan.token_string;
         match(ID);
 
-        if (token == DOLLAR)
+        if (current_token == DOLLAR)
         {
             match(DOLLAR);
-            declare->type = String;
+            declare->type = STRING_T;
         }
         else
         {
-            declare->type = Numeric;
+            declare->type = NUMERIC_T;
         }
 
         match(LPAREN);
-        declare->attr.val = scan->tokenString;
+        declare->attr.value = scan.token_string;
         match(NUM);
-        if (token == COMMA)
+        if (current_token == COMMA)
         {
             match(COMMA);
-            declare->attr.val2 = scan->tokenString;
+            declare->attr.value_2 = scan.token_string;
             match(NUM);
         }
 
@@ -216,10 +210,10 @@ namespace bc
         // TreeNode * t = statement();
         // TreeNode * p = t;
 
-        //        if (token == DIM) {
-        //            treeNode = Utils::newDimNode(scan->getLineno());
+        //        if (token == DIM_V) {
+        //            treeNode = Utils::newDimNode(scan.current_line_number());
         //        }
-        while ((token != ENDFILE) && (token != ENDCOMMAND))
+        while ((current_token != END_FILE) && (current_token != END_COMMAND))
         {
             // while ((token != ENDFILE) && (token != THEN) && (token != ELSE)) {
             /*TreeNode * q;
@@ -241,8 +235,8 @@ namespace bc
 
     TreeNode *Parser::statement()
     {
-        const auto t = new TreeNode{StmtK, scan->getLineno()};
-        switch (token)
+        const auto t = new TreeNode{STATEMENT_K, scan.current_line_number()};
+        switch (current_token)
         {
         case IF:
             // t = if_stmt();
@@ -251,8 +245,8 @@ namespace bc
             // t = assign_stmt();
             break;
         default:
-            cout << "unexpected token -> " << token << " " << scan->tokenString << endl;
-            token = scan->getToken();
+            cout << "unexpected token -> " << current_token << " " << scan.token_string << endl;
+            current_token = scan.next_token();
             break;
         }
 

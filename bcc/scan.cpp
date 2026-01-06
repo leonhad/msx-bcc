@@ -7,39 +7,38 @@ using namespace definitions;
 namespace bc
 {
 
-    Scan::Scan(string filein)
+    Scan::Scan(const string &filein) : filein{filein.c_str(), ios::in | ios::out}
     {
-        this->filein = new fstream(filein.c_str(), ios::in | ios::out);
+        current = EOF;
         lineno = 0;
-        reservedWords["IF"] = IF;
-        reservedWords["THEN"] = THEN;
-        reservedWords["ELSE"] = ELSE;
-        reservedWords["FOR"] = FOR;
-        reservedWords["TO"] = TO;
-        reservedWords["NEXT"] = NEXT;
-        reservedWords["DIM"] = DIM;
-        reservedWords["END"] = END;
-        reservedWords["PRINT"] = PRINT;
+        reserved_words["IF"] = IF;
+        reserved_words["THEN"] = THEN;
+        reserved_words["ELSE"] = ELSE;
+        reserved_words["FOR"] = FOR;
+        reserved_words["TO"] = TO;
+        reserved_words["NEXT"] = NEXT;
+        reserved_words["DIM"] = DIM;
+        reserved_words["END"] = END;
+        reserved_words["PRINT"] = PRINT;
     }
 
     Scan::~Scan()
     {
         if (filein)
         {
-            if (filein->is_open())
+            if (filein.is_open())
             {
-                filein->close();
+                filein.close();
             }
-            delete filein;
         }
     }
 
-    char Scan::getNextChar()
+    char Scan::next_char()
     {
         int ret = EOF;
-        if (!filein->eof())
+        if (!filein.eof())
         {
-            ret = filein->get();
+            ret = filein.get();
             if (ret == '\n')
             {
                 lineno++;
@@ -47,33 +46,34 @@ namespace bc
             else if (ret == '\r')
             {
                 // Ignore CR
-                return getNextChar();
+                return next_char();
             }
+
             current = ret;
         }
-        return ret;
+
+        return static_cast<char>(ret);
     }
 
-    TokenType Scan::reservedLookup(string s)
+    TokenType Scan::reserved_lookup(const string &name)
     {
-        map<string, TokenType>::iterator i;
-        for (i = reservedWords.begin(); i != reservedWords.end(); i++)
+        for (const auto &[key, value] : reserved_words)
         {
-            if (s == (*i).first)
+            if (name == key)
             {
-                return (*i).second;
+                return value;
             }
         }
         return ID;
     }
 
-    TokenType Scan::getSpecialChar(char c)
+    TokenType Scan::get_special_char(const char check_char)
     {
         TokenType currentToken = ERROR;
-        switch (c)
+        switch (check_char)
         {
         case EOF:
-            currentToken = ENDFILE;
+            currentToken = END_FILE;
             break;
         case '=':
             currentToken = EQ;
@@ -115,10 +115,10 @@ namespace bc
             currentToken = SEMI;
             break;
         case '\n':
-            currentToken = ENDLINE;
+            currentToken = END_LINE;
             break;
         case ':':
-            currentToken = ENDCOMMAND;
+            currentToken = END_COMMAND;
             break;
         case '$':
             currentToken = DOLLAR;
@@ -129,28 +129,28 @@ namespace bc
         return currentToken;
     }
 
-    TokenType Scan::getToken()
+    TokenType Scan::next_token()
     {
-        tokenString.erase();
+        token_string.erase();
         /* holds the current token to be returned */
         TokenType currentToken{};
         /* the current state always begins at START */
         StateType state = START;
-        /* flag to indicate save to tokenString */
+        /* flag to indicate save to token_string */
         while (state != DONE)
         {
-            const int c = getNextChar();
+            const char c = next_char();
             bool save = true;
             switch (state)
             {
             case START:
                 if (isdigit(c))
                 {
-                    state = INNUM;
+                    state = IN_NUMBER;
                 }
                 else if (isalpha(c))
                 {
-                    state = INID;
+                    state = IN_ID;
                 }
                 else if ((c == ' ') || (c == '\t'))
                 {
@@ -159,44 +159,44 @@ namespace bc
                 else if (c == '"')
                 {
                     save = false;
-                    state = INSTRING;
+                    state = IN_STRING;
                 }
                 else
                 {
                     state = DONE;
                     save = false;
-                    currentToken = getSpecialChar(c);
+                    currentToken = get_special_char(c);
                 }
                 break;
-            case INNUM:
+            case IN_NUMBER:
                 if (!isdigit(c))
                 {
                     /* backup in the input */
-                    ungetNextChar();
+                    unget_char();
                     save = false;
                     state = DONE;
                     currentToken = NUM;
                 }
                 break;
-            case INID:
+            case IN_ID:
                 switch (c)
                 {
                 case ' ':
                 case '\t':
-                    ungetNextChar();
+                    unget_char();
                     save = false;
                     state = DONE;
                     currentToken = ID;
                     break;
                 default:
-                    TokenType temp = getSpecialChar(c);
+                    TokenType temp = get_special_char(c);
                     switch (temp)
                     {
                     case ERROR:
                         break;
-                    case ENDFILE:
+                    case END_FILE:
                     default:
-                        ungetNextChar();
+                        unget_char();
                         save = false;
                         state = DONE;
                         currentToken = ID;
@@ -204,7 +204,7 @@ namespace bc
                     }
                 }
                 break;
-            case INSTRING:
+            case IN_STRING:
                 if (c == '"')
                 {
                     save = false;
@@ -221,26 +221,28 @@ namespace bc
                 currentToken = ERROR;
                 break;
             }
+
             if (save)
             {
-                tokenString += (char)c;
+                token_string += (char)c;
             }
+
             if (state == DONE)
             {
                 if (currentToken == ID)
                 {
-                    currentToken = reservedLookup(tokenString);
+                    currentToken = reserved_lookup(token_string);
                 }
             }
         }
         return currentToken;
     }
 
-    void Scan::ungetNextChar()
+    void Scan::unget_char()
     {
-        if (!filein->eof())
+        if (!filein.eof())
         {
-            filein->putback(current);
+            filein.putback(static_cast<char>(current));
         }
         if (current == '\n')
         {
@@ -248,8 +250,8 @@ namespace bc
         }
     }
 
-    unsigned int Scan::getLineno()
+    unsigned int Scan::current_line_number() const
     {
         return lineno;
     }
-} // namespace bc
+}

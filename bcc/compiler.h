@@ -1,6 +1,5 @@
 #pragma once
 
-#include "codegen.h"
 #include "parser.h"
 #include <string>
 
@@ -8,12 +7,12 @@ namespace bc
 {
     class Compiler
     {
-        std::string fileout;
-        std::string filein;
-        std::string fileAssembly;
+        std::string output;
+        std::string input;
+        std::string assembly;
 
       public:
-        Compiler(const char *filein, const char *fileout);
+        Compiler(const char *input, const char *output);
         ~Compiler() = default;
 
         void run() const;

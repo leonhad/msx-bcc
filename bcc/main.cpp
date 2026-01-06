@@ -1,5 +1,5 @@
 #include "compiler.h"
-#include "file_names.h"
+#include "filename.h"
 #include "messages.h"
 
 using namespace bc;

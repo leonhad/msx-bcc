@@ -2,4 +2,4 @@
 
 #include <string>
 
-unsigned int toInt(const std::string &str);
+unsigned int to_int(const std::string &str);

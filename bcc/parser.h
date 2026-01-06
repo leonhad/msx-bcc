@@ -12,13 +12,13 @@ namespace bc
     {
         int line;
         int program_line;
-        /* holds current token */
-        definitions::TokenType token;
-        Scan *scan;
+        definitions::TokenType current_token;
+        Scan scan;
 
       public:
-        explicit Parser(std::string filein);
-        ~Parser();
+        explicit Parser(const std::string& file_input);
+        ~Parser() = default;
+
         TreeNode *parse();
 
       private:

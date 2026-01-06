@@ -12,9 +12,10 @@ namespace bc
         location = 0;
     }
 
-    void SymbolTable::insert(const std::string &name, const VarType varType, const ExpType expType, const unsigned int lineno, const unsigned int size1, const unsigned int size2)
+    void SymbolTable::insert(const std::string &name, const VariableType varType, const ExpressionType expression_type, const unsigned int line_number, const unsigned int size_left,
+                             const unsigned int size_right)
     {
-        if (lookup(name, expType))
+        if (lookup(name, expression_type))
         {
             string msg;
             msg += "Var ";
@@ -25,21 +26,21 @@ namespace bc
 
         SYMBOL_TABLE sym;
         sym.name = name;
-        sym.varType = varType;
-        sym.expType = expType;
-        sym.size1 = size1;
-        sym.size2 = size2;
-        sym.lines.push_back(lineno);
+        sym.variable_type = varType;
+        sym.expression_type = expression_type;
+        sym.size_left = size_left;
+        sym.size_right = size_right;
+        sym.lines.push_back(line_number);
         table.push_back(sym);
     }
 
-    bool SymbolTable::lookup(const std::string &name, const ExpType expType) const
+    bool SymbolTable::lookup(const std::string &name, const ExpressionType expression_type) const
     {
         bool ret = false;
 
         for (const auto &i : table)
         {
-            if (i.name == name && i.expType == expType)
+            if (i.name == name && i.expression_type == expression_type)
             {
                 ret = true;
             }
@@ -52,4 +53,4 @@ namespace bc
     {
         return table;
     }
-} // namespace bc
+}

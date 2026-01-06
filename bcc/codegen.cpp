@@ -9,70 +9,67 @@ using namespace definitions;
 namespace bc
 {
 
-    CodeGen::CodeGen(const std::string &output) : locals{0}, scope{0}
+    CodeGen::CodeGen(const std::string &output) : output{output}, locals{0}, scope{0}
     {
-        this->outputFile = new ofstream(output);
     }
 
     CodeGen::~CodeGen()
     {
-        if (outputFile)
+        if (output)
         {
-            if (outputFile->is_open())
+            if (output.is_open())
             {
-                outputFile->flush();
-                outputFile->close();
+                output.flush();
+                output.close();
             }
-
-            // delete fileout;
         }
     }
 
-    void CodeGen::emitInitMethod(const char *name, unsigned int line) const
+    void CodeGen::emit_init_method(const char *name, unsigned int line)
     {
         string _name = "_";
         _name += name;
 
-        *outputFile << ".globl _" << name << endl;
-        *outputFile << _name << ":" << endl;
+        output << ".globl _" << name << endl;
+        output << _name << ":" << endl;
     }
 
-    void CodeGen::generate(const TreeNode *syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
+    void CodeGen::generate(const TreeNode *syntax_tree, const vector<SYMBOL_TABLE> &symbols)
     {
-        emitComment("BCC compilation from MSX Basic");
-        emitVersion();
-        emitBreakline();
+        emit_comment("BCC compilation from MSX Basic");
+        emit_version();
+        emit_break_line();
 
         // vars
-        emitSection(S_DATA);
-        generateVars(symtabs);
+        emit_section(S_DATA);
+        generate_vars(symbols);
 
-        emitBreakline();
+        emit_break_line();
 
         // Program
-        emitSection(S_TEXT);
-        *outputFile << "Ltext0:" << endl;
+        emit_section(S_TEXT);
+        output << "Ltext0:" << endl;
 
-        emitInitMethod("basic_start", 0);
-        *outputFile << "\tpush %rbp" << endl;
-        *outputFile << "\tmov %rsp, %rbp" << endl;
-        emitBreakline();
+        emit_init_method("basic_start", 0);
+        output << "\tpush %rbp" << endl;
+        output << "\tmov %rsp, %rbp" << endl;
+        emit_break_line();
 
-        for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i)
+        for (auto i = syntax_tree->child.begin(); i != syntax_tree->child.end(); ++i)
         {
             switch ((*i)->kind)
             {
-            case LineK:
-                emitInitMethod((*i)->attr.val.c_str(), (*i)->lineno + 1);
-                generateLine(*i);
+            case LINE_K:
+                emit_init_method((*i)->attr.value.c_str(), (*i)->lineno + 1);
+                generate_line(*i);
 
-                if ((i + 1) == syntaxTree->child.end())
+                if ((i + 1) == syntax_tree->child.end())
                 {
-                    *outputFile << "\tleave" << endl;
-                    *outputFile << "\tret" << endl;
+                    output << "\tleave" << endl;
+                    output << "\tret" << endl;
                 }
 
-                emitBreakline();
+                emit_break_line();
                 break;
             default:
                 cerr << "Tipo de TreeNode não esperado. " << endl;
@@ -81,26 +78,26 @@ namespace bc
         }
     }
 
-    void CodeGen::generateLine(TreeNode *tree)
+    void CodeGen::generate_line(TreeNode *tree)
     {
         ostringstream _tempLine;
         _tempLine << "L" << locals;
 
-        *outputFile << "L" << locals << ":" << endl;
+        output << "L" << locals << ":" << endl;
         locals++;
 
         for (auto &i : tree->child)
         {
             switch (i->kind)
             {
-            case DimK:
-                generateDim(i);
+            case DIM_K:
+                generate_dim(i);
                 break;
-            case EndK:
-                *outputFile << "\tcall _basic_end" << endl;
+            case END_K:
+                output << "\tcall _basic_end" << endl;
                 break;
-            case PrintK:
-                generatePrint(i);
+            case PRINT_K:
+                generate_print(i);
                 break;
             default:
                 cerr << "Tipo de TreeNode não esperado." << endl;
@@ -109,14 +106,14 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDim(TreeNode *tree)
+    void CodeGen::generate_dim(TreeNode *tree)
     {
         for (const auto &i : tree->child)
         {
             switch (i->kind)
             {
-            case DeclareK:
-                generateDeclare(i);
+            case DECLARE_K:
+                generate_declare(i);
                 break;
             default:
                 cerr << "Tipo de TreeNode não esperado." << endl;
@@ -125,64 +122,64 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDeclare(const TreeNode *tree)
+    void CodeGen::generate_declare(const TreeNode *tree)
     {
         string name = tree->attr.name;
-        if (tree->type == String)
+        if (tree->type == STRING_T)
         {
             name += "$";
         }
 
-        if (tree->attr.op == DIM)
+        if (tree->attr.operation == DIM)
         {
-            unsigned int size = toInt(tree->attr.val);
+            unsigned int size = to_int(tree->attr.value);
 
-            if (const unsigned int size2 = toInt(tree->attr.val2))
+            if (const unsigned int size2 = to_int(tree->attr.value_2))
             {
                 size *= size2;
             }
 
-            if (tree->type == String)
+            if (tree->type == STRING_T)
             {
                 // String size
                 size *= 256;
             }
-            else if (tree->type == Numeric)
+            else if (tree->type == NUMERIC_T)
             {
                 // Numeric size
                 size *= 4;
             }
-            *outputFile << "\txorq %rax, %rax" << endl;
-            *outputFile << "\tmovq $" << size << ", %rcx" << endl;
-            *outputFile << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
-            *outputFile << ".LC" << locals << ":" << endl;
-            *outputFile << "\tmovl %eax, (%edx)" << endl;
-            *outputFile << "\tloop .LC" << locals << endl;
+            output << "\txorq %rax, %rax" << endl;
+            output << "\tmovq $" << size << ", %rcx" << endl;
+            output << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
+            output << ".LC" << locals << ":" << endl;
+            output << "\tmovl %eax, (%edx)" << endl;
+            output << "\tloop .LC" << locals << endl;
 
             locals++;
-            emitBreakline();
+            emit_break_line();
         }
     }
 
-    void CodeGen::generatePrint(const TreeNode *tree)
+    void CodeGen::generate_print(const TreeNode *tree)
     {
     }
 
-    void CodeGen::emitFile(const char *file)
+    void CodeGen::emit_file(const char *file)
     {
     }
 
-    void CodeGen::emitVersion()
+    void CodeGen::emit_version()
     {
-        *outputFile << "\t.version \"1.0\"" << endl;
+        output << "\t.version \"1.0\"" << endl;
     }
 
-    void CodeGen::emitBreakline()
+    void CodeGen::emit_break_line()
     {
-        *outputFile << endl;
+        output << endl;
     }
 
-    void CodeGen::emitSection(const SectionType section) const
+    void CodeGen::emit_section(const SectionType section)
     {
         auto _section = "";
 
@@ -201,49 +198,51 @@ namespace bc
             _section = ".text";
             break;
         }
-        *outputFile << "\t" << _section << endl;
+
+        output << "\t" << _section << endl;
     }
 
-    void CodeGen::emitComment(const char *comment) const
+    void CodeGen::emit_comment(const char *comment)
     {
-        *outputFile << "\t// " << comment << endl;
+        output << "\t// " << comment << endl;
     }
 
-    void CodeGen::emitAlign(const int align) const
+    void CodeGen::emit_align(const int align)
     {
-        *outputFile << "\t.align " << align << endl;
+        output << "\t.align " << align << endl;
     }
 
-    void CodeGen::generateVars(const vector<SYMBOL_TABLE> &symtabs) const
+    void CodeGen::generate_vars(const vector<SYMBOL_TABLE> &symbols)
     {
         string name;
         unsigned int size;
 
-        emitAlign(8);
+        emit_align(8);
 
-        for (const auto &symtab : symtabs)
+        for (const auto &symtab : symbols)
         {
-            switch (symtab.varType)
+            switch (symtab.variable_type)
             {
-            case DimV:
-                size = symtab.size1;
-                if (symtab.size2)
+            case DIM_V:
+                size = symtab.size_left;
+                if (symtab.size_right)
                 {
-                    size *= symtab.size2;
+                    size *= symtab.size_right;
                 }
                 name = symtab.name;
-                if (symtab.expType == String)
+                if (symtab.expression_type == STRING_T)
                 {
                     name += "$";
                     // String size
                     size *= 256;
                 }
-                else if (symtab.expType == Numeric)
+                else if (symtab.expression_type == NUMERIC_T)
                 {
                     // Numeric size
                     size *= 4;
                 }
-                *outputFile << "\t.lcomm _" << name << "," << size << endl;
+
+                output << "\t.lcomm _" << name << "," << size << endl;
                 break;
             default:
                 break;

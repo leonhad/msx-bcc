@@ -1,27 +1,25 @@
-#ifndef SYMTAB_H
-#define SYMTAB_H
+#pragma once
 
+#include "attributes.h"
 #include <string>
 #include <vector>
 
-#include "attributes.h"
-
 namespace bc
 {
-    enum VarType
+    enum VariableType
     {
-        DimV,
-        VarV
+        DIM_V,
+        VARIABLE_V
     };
 
     typedef struct
     {
         std::string name;
-        VarType varType;
-        definitions::ExpType expType;
+        VariableType variable_type;
+        definitions::ExpressionType expression_type;
         std::vector<unsigned int> lines;
-        unsigned int size1;
-        unsigned int size2;
+        unsigned int size_left;
+        unsigned int size_right;
     } SYMBOL_TABLE;
 
     class SymbolTable
@@ -31,11 +29,9 @@ namespace bc
 
       public:
         SymbolTable();
-        void insert(const std::string &name, VarType varType, definitions::ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
-        [[nodiscard]] bool lookup(const std::string &name, definitions::ExpType expType) const;
+        void insert(const std::string &name, VariableType varType, definitions::ExpressionType expression_type, unsigned int line_number, unsigned int size_left = 0, unsigned int size_right = 0);
+        [[nodiscard]] bool lookup(const std::string &name, definitions::ExpressionType expression_type) const;
 
         std::vector<SYMBOL_TABLE> get();
     };
-} // namespace bc
-
-#endif /* SYMTAB_H */
+}

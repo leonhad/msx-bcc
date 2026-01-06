@@ -110,7 +110,7 @@ am_bcc_OBJECTS = analyze.$(OBJEXT) attributes.$(OBJEXT) \
 	codegen.$(OBJEXT) compiler.$(OBJEXT) numbers.$(OBJEXT) \
 	main.$(OBJEXT) parser.$(OBJEXT) scan.$(OBJEXT) \
 	symbol_table.$(OBJEXT) treenode.$(OBJEXT) messages.$(OBJEXT) \
-	file_names.$(OBJEXT)
+	filename.$(OBJEXT)
 bcc_OBJECTS = $(am_bcc_OBJECTS)
 bcc_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -134,7 +134,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/analyze.Po ./$(DEPDIR)/attributes.Po \
 	./$(DEPDIR)/codegen.Po ./$(DEPDIR)/compiler.Po \
-	./$(DEPDIR)/file_names.Po ./$(DEPDIR)/main.Po \
+	./$(DEPDIR)/filename.Po ./$(DEPDIR)/main.Po \
 	./$(DEPDIR)/messages.Po ./$(DEPDIR)/numbers.Po \
 	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scan.Po \
 	./$(DEPDIR)/symbol_table.Po ./$(DEPDIR)/treenode.Po
@@ -314,10 +314,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 bcc_SOURCES = analyze.cpp attributes.cpp codegen.cpp compiler.cpp numbers.cpp \
-    main.cpp parser.cpp scan.cpp symbol_table.cpp treenode.cpp messages.cpp file_names.cpp
+    main.cpp parser.cpp scan.cpp symbol_table.cpp treenode.cpp messages.cpp filename.cpp
 
 noinst_HEADERS = analyze.h attributes.h codegen.h compiler.h definitions.h numbers.h \
-    parser.h scan.h symbol_table.h treenode.h messages.h file_names.h
+    parser.h scan.h symbol_table.h treenode.h messages.h filename.h
 
 all: all-am
 
@@ -416,7 +416,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attributes.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/codegen.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/compiler.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_names.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filename.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Po@am__quote@ # am--include-marker
@@ -591,7 +591,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/attributes.Po
 	-rm -f ./$(DEPDIR)/codegen.Po
 	-rm -f ./$(DEPDIR)/compiler.Po
-	-rm -f ./$(DEPDIR)/file_names.Po
+	-rm -f ./$(DEPDIR)/filename.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/messages.Po
 	-rm -f ./$(DEPDIR)/numbers.Po
@@ -648,7 +648,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/attributes.Po
 	-rm -f ./$(DEPDIR)/codegen.Po
 	-rm -f ./$(DEPDIR)/compiler.Po
-	-rm -f ./$(DEPDIR)/file_names.Po
+	-rm -f ./$(DEPDIR)/filename.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/messages.Po
 	-rm -f ./$(DEPDIR)/numbers.Po

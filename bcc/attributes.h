@@ -8,9 +8,9 @@ namespace bc
     class Attributes
     {
       public:
-        definitions::TokenType op;
-        std::string val;
-        std::string val2;
+        definitions::TokenType operation;
+        std::string value;
+        std::string value_2;
         std::string name;
 
         Attributes();

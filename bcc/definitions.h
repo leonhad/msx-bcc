@@ -9,19 +9,19 @@ namespace definitions
     enum StateType
     {
         START,
-        INNUM,
-        INID,
-        INSTRING,
+        IN_NUMBER,
+        IN_ID,
+        IN_STRING,
         DONE
     };
 
     /** bookkeeping tokens */
     enum TokenType
     {
-        ENDFILE,
+        END_FILE,
         ERROR,
-        ENDLINE,
-        ENDCOMMAND,
+        END_LINE,
+        END_COMMAND,
         /* reserved words */
         DATA,
         DIM,
@@ -59,34 +59,34 @@ namespace definitions
 
     struct ReservedWords
     {
-        std::string str;
-        TokenType tok;
+        std::string name;
+        TokenType token;
     };
 
     enum NodeKind
     {
-        ProgramK,
-        LineK,
-        StmtK,
-        ExpK,
-        IfK,
-        RepeatK,
-        AssignK,
-        DimK,
-        DeclareK,
-        EndK,
-        PrintK,
+        PROGRAM_K,
+        LINE_K,
+        STATEMENT_K,
+        EXPRESSION_K,
+        IF_K,
+        REPEAT_K,
+        ASSIGN_K,
+        DIM_K,
+        DECLARE_K,
+        END_K,
+        PRINT_K,
         // Expressions
-        OpK,
-        ConstK,
-        IdK
+        OPERATION_K,
+        CONSTANT_K,
+        ID_K
     };
 
-    /* ExpType is used for type checking */
-    enum ExpType
+    /* ExpressionType is used for type checking */
+    enum ExpressionType
     {
-        Numeric,
-        String
+        NUMERIC_T,
+        STRING_T
     };
 
     enum SectionType

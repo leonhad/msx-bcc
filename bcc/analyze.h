@@ -7,15 +7,15 @@ namespace bc
 {
     class Analyze
     {
-        SymbolTable symtab;
+        SymbolTable symbols;
 
-        void traverse(const TreeNode *treeNode, void (Analyze::*preProc)(const TreeNode *), void (Analyze::*postProc)(const TreeNode *));
+        void traverse(const TreeNode *tree_node, void (Analyze::*pre_proc)(const TreeNode *), void (Analyze::*post_proc)(const TreeNode *));
 
-        void insertNode(const TreeNode *treeNode);
+        void insert_node(const TreeNode *tree_node);
 
-        void nullProc(const TreeNode *treeNode);
+        void nullProc(const TreeNode *tree_node);
 
       public:
-        std::vector<SYMBOL_TABLE> buildSymbolTable(const TreeNode *syntaxTree);
+        std::vector<SYMBOL_TABLE> buildSymbolTable(const TreeNode *syntax_tree);
     };
 }

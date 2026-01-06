@@ -10,29 +10,29 @@ namespace bc
 {
     class CodeGen
     {
-        std::string currentLine;
-        std::ofstream *outputFile;
+        std::string current_line;
+        std::ofstream output;
 
         unsigned int locals;
         unsigned int scope;
 
       public:
-        CodeGen(const std::string &output);
+        explicit CodeGen(const std::string &output);
         ~CodeGen();
-        void generate(const TreeNode *syntaxTree, const std::vector<SYMBOL_TABLE> &symtabs);
+        void generate(const TreeNode *syntax_tree, const std::vector<SYMBOL_TABLE> &symbols);
 
       private:
-        void emitFile(const char *file);
-        void emitVersion();
-        void emitBreakline();
-        void emitAlign(int align) const;
-        void emitComment(const char *comment) const;
-        void emitSection(definitions::SectionType section) const;
-        void emitInitMethod(const char *name, unsigned int line) const;
-        void generateVars(const std::vector<SYMBOL_TABLE> &symtabs) const;
-        void generateLine(TreeNode *tree);
-        void generateDim(TreeNode *tree);
-        void generateDeclare(const TreeNode *tree);
-        void generatePrint(const TreeNode *tree);
+        void emit_file(const char *file);
+        void emit_version();
+        void emit_break_line();
+        void emit_align(int align);
+        void emit_comment(const char *comment);
+        void emit_section(definitions::SectionType section);
+        void emit_init_method(const char *name, unsigned int line);
+        void generate_vars(const std::vector<SYMBOL_TABLE> &symbols);
+        void generate_line(TreeNode *tree);
+        void generate_dim(TreeNode *tree);
+        void generate_declare(const TreeNode *tree);
+        void generate_print(const TreeNode *tree);
     };
 }

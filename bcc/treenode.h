@@ -2,8 +2,6 @@
 
 #include "attributes.h"
 #include "definitions.h"
-
-#include <memory>
 #include <vector>
 
 namespace bc
@@ -22,6 +20,6 @@ namespace bc
 
         std::vector<TreeNode *> child;
         Attributes attr;
-        definitions::ExpType type;
+        definitions::ExpressionType type;
     };
 }

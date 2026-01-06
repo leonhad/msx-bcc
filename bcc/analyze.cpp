@@ -4,24 +4,24 @@
 
 namespace bc
 {
-    std::vector<SYMBOL_TABLE> Analyze::buildSymbolTable(const TreeNode *syntaxTree)
+    std::vector<SYMBOL_TABLE> Analyze::buildSymbolTable(const TreeNode *syntax_tree)
     {
-        traverse(syntaxTree, &Analyze::insertNode, &Analyze::nullProc);
-        return symtab.get();
+        traverse(syntax_tree, &Analyze::insert_node, &Analyze::nullProc);
+        return symbols.get();
     }
 
     void Analyze::nullProc(const TreeNode *)
     {
     }
 
-    void Analyze::insertNode(const TreeNode *treeNode)
+    void Analyze::insert_node(const TreeNode *tree_node)
     {
-        switch (treeNode->kind)
+        switch (tree_node->kind)
         {
-        case definitions::DimK:
-            for (const auto &i : treeNode->child)
+        case definitions::DIM_K:
+            for (const auto &i : tree_node->child)
             {
-                symtab.insert(i->attr.name, DimV, i->type, i->lineno, toInt(i->attr.val), toInt(i->attr.val2));
+                symbols.insert(i->attr.name, DIM_V, i->type, i->lineno, to_int(i->attr.value), to_int(i->attr.value_2));
             }
 
             break;
@@ -30,15 +30,15 @@ namespace bc
         }
     }
 
-    void Analyze::traverse(const TreeNode *treeNode, void (Analyze::*preProc)(const TreeNode *), void (Analyze::*postProc)(const TreeNode *))
+    void Analyze::traverse(const TreeNode *tree_node, void (Analyze::*pre_proc)(const TreeNode *), void (Analyze::*post_proc)(const TreeNode *))
     {
-        (this->*preProc)(treeNode);
+        (this->*pre_proc)(tree_node);
 
-        for (const auto &i : treeNode->child)
+        for (const auto &i : tree_node->child)
         {
-            traverse(i, preProc, postProc);
+            traverse(i, pre_proc, post_proc);
         }
 
-        (this->*postProc)(treeNode);
+        (this->*post_proc)(tree_node);
     }
 }

@@ -3,9 +3,8 @@
 
 namespace bc
 {
-    Attributes::Attributes()
+    Attributes::Attributes() : operation{definitions::ERROR}
     {
-        op = definitions::ERROR;
     }
 
-} // namespace bc
+}
