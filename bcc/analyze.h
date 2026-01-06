@@ -18,5 +18,6 @@ namespace bc
         void insertNode(const TreeNode *treeNode);
 
         void nullProc(const TreeNode *treeNode);
+
     };
 }
