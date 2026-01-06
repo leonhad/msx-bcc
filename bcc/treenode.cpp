@@ -5,7 +5,7 @@ namespace bc
     TreeNode::TreeNode(definitions::NodeKind kind, unsigned int lineno)
     {
         sibling = nullptr;
-        nodekind = kind;
+        this->kind = kind;
         this->lineno = lineno;
     }
 

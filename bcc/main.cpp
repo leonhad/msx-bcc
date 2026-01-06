@@ -1,7 +1,6 @@
 #include "compiler.h"
-#include "messages.h"
 #include "file_names.h"
-#include <iostream>
+#include "messages.h"
 
 using namespace bc;
 using namespace std;

@@ -15,11 +15,8 @@ namespace bc
         std::vector<TreeNode *> child;
         TreeNode *sibling;
         unsigned int lineno;
-        definitions::NodeKind nodekind;
-        union Kind {
-            definitions::NodeKind stmt;
-            definitions::ExpKind exp;
-        } kind;
+        definitions::NodeKind kind;
+
         Attributes attr;
         definitions::ExpType type;
     };

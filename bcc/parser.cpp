@@ -87,7 +87,7 @@ namespace bc
     TreeNode *Parser::assign_sequence()
     {
         TreeNode *assign = new TreeNode(StmtK, scan->getLineno());
-        assign->kind.stmt = AssignK;
+        assign->kind = AssignK;
         assign->attr.name = scan->tokenString;
         match(ID);
 
@@ -118,7 +118,7 @@ namespace bc
         if (token == NUM)
         {
             exp->attr.val = (char *)scan->tokenString.c_str();
-            exp->kind.exp = ConstK;
+            exp->kind = ConstK;
         }
         if (token == ID)
         {

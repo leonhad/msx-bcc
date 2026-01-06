@@ -19,7 +19,7 @@ namespace bc
 
     void Analyze::insertNode(TreeNode *treeNode)
     {
-        switch (treeNode->nodekind)
+        switch (treeNode->kind)
         {
         case DimK:
             for (const auto &i : treeNode->child)

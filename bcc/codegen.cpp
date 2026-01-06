@@ -59,7 +59,7 @@ namespace bc
 
         for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i)
         {
-            switch ((*i)->nodekind)
+            switch ((*i)->kind)
             {
             case LineK:
                 emitInitMethod((*i)->attr.val.c_str(), (*i)->lineno + 1);
@@ -90,7 +90,7 @@ namespace bc
         vector<TreeNode *>::iterator i;
         for (i = tree->child.begin(); i != tree->child.end(); ++i)
         {
-            switch ((*i)->nodekind)
+            switch ((*i)->kind)
             {
             case DimK:
                 generateDim(*i);
@@ -110,13 +110,12 @@ namespace bc
 
     void CodeGen::generateDim(TreeNode *tree)
     {
-        vector<TreeNode *>::iterator i;
-        for (i = tree->child.begin(); i != tree->child.end(); i++)
+        for (const auto & i : tree->child)
         {
-            switch ((*i)->nodekind)
+            switch (i->kind)
             {
             case DeclareK:
-                generateDeclare(*i);
+                generateDeclare(i);
                 break;
             default:
                 cerr << "Tipo de TreeNode não esperado." << endl;

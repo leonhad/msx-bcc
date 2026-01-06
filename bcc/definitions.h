@@ -75,11 +75,8 @@ namespace definitions
         DimK,
         DeclareK,
         EndK,
-        PrintK
-    };
-
-    enum ExpKind
-    {
+        PrintK,
+        // Expressions
         OpK,
         ConstK,
         IdK
