@@ -1,4 +1,5 @@
 #include "codegen.h"
+#include "numbers.h"
 #include <iostream>
 #include <sstream>
 
@@ -134,9 +135,9 @@ namespace bc
 
         if (tree->attr.op == DIM)
         {
-            unsigned int size = atoi(tree->attr.val.c_str());
+            unsigned int size = toInt(tree->attr.val);
 
-            if (const unsigned int size2 = atoi(tree->attr.val2.c_str()))
+            if (const unsigned int size2 = toInt(tree->attr.val2))
             {
                 size *= size2;
             }
@@ -146,9 +147,9 @@ namespace bc
                 // String size
                 size *= 256;
             }
-            else if (tree->type == Integer)
+            else if (tree->type == Numeric)
             {
-                // Integer size
+                // Numeric size
                 size *= 4;
             }
             *outputFile << "\txorq %rax, %rax" << endl;
@@ -237,9 +238,9 @@ namespace bc
                     // String size
                     size *= 256;
                 }
-                else if (symtab.expType == Integer)
+                else if (symtab.expType == Numeric)
                 {
-                    // Integer size
+                    // Numeric size
                     size *= 4;
                 }
                 *outputFile << "\t.lcomm _" << name << "," << size << endl;

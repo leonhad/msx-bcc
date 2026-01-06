@@ -12,10 +12,10 @@ namespace bc
     class TreeNode
     {
       public:
-        explicit TreeNode(definitions::NodeKind kind, unsigned int lineno);
+        explicit TreeNode(definitions::NodeKind kind, unsigned int line_number);
         ~TreeNode();
 
-        void addChild(TreeNode *node);
+        void add_child(TreeNode *node);
 
         const unsigned int lineno;
         definitions::NodeKind kind;

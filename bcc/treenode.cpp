@@ -2,7 +2,7 @@
 
 namespace bc
 {
-    TreeNode::TreeNode(const definitions::NodeKind kind, const unsigned int lineno) : lineno{lineno}, kind{kind}, type{definitions::ExpType::Float}
+    TreeNode::TreeNode(const definitions::NodeKind kind, const unsigned int line_number) : lineno{line_number}, kind{kind}, type{definitions::ExpType::Numeric}
     {
     }
 
@@ -14,7 +14,7 @@ namespace bc
         }
     }
 
-    void TreeNode::addChild(TreeNode *node)
+    void TreeNode::add_child(TreeNode *node)
     {
         this->child.push_back(node);
     }

@@ -107,9 +107,10 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_bcc_OBJECTS = analyze.$(OBJEXT) attributes.$(OBJEXT) \
-	codegen.$(OBJEXT) compiler.$(OBJEXT) main.$(OBJEXT) \
-	parser.$(OBJEXT) scan.$(OBJEXT) symbol_table.$(OBJEXT) \
-	treenode.$(OBJEXT) messages.$(OBJEXT) file_names.$(OBJEXT)
+	codegen.$(OBJEXT) compiler.$(OBJEXT) numbers.$(OBJEXT) \
+	main.$(OBJEXT) parser.$(OBJEXT) scan.$(OBJEXT) \
+	symbol_table.$(OBJEXT) treenode.$(OBJEXT) messages.$(OBJEXT) \
+	file_names.$(OBJEXT)
 bcc_OBJECTS = $(am_bcc_OBJECTS)
 bcc_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -134,9 +135,9 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/analyze.Po ./$(DEPDIR)/attributes.Po \
 	./$(DEPDIR)/codegen.Po ./$(DEPDIR)/compiler.Po \
 	./$(DEPDIR)/file_names.Po ./$(DEPDIR)/main.Po \
-	./$(DEPDIR)/messages.Po ./$(DEPDIR)/parser.Po \
-	./$(DEPDIR)/scan.Po ./$(DEPDIR)/symbol_table.Po \
-	./$(DEPDIR)/treenode.Po
+	./$(DEPDIR)/messages.Po ./$(DEPDIR)/numbers.Po \
+	./$(DEPDIR)/parser.Po ./$(DEPDIR)/scan.Po \
+	./$(DEPDIR)/symbol_table.Po ./$(DEPDIR)/treenode.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -312,10 +313,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-bcc_SOURCES = analyze.cpp attributes.cpp codegen.cpp compiler.cpp \
+bcc_SOURCES = analyze.cpp attributes.cpp codegen.cpp compiler.cpp numbers.cpp \
     main.cpp parser.cpp scan.cpp symbol_table.cpp treenode.cpp messages.cpp file_names.cpp
 
-noinst_HEADERS = analyze.h attributes.h codegen.h compiler.h definitions.h \
+noinst_HEADERS = analyze.h attributes.h codegen.h compiler.h definitions.h numbers.h \
     parser.h scan.h symbol_table.h treenode.h messages.h file_names.h
 
 all: all-am
@@ -418,6 +419,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file_names.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scan.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symbol_table.Po@am__quote@ # am--include-marker
@@ -592,6 +594,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/file_names.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/messages.Po
+	-rm -f ./$(DEPDIR)/numbers.Po
 	-rm -f ./$(DEPDIR)/parser.Po
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f ./$(DEPDIR)/symbol_table.Po
@@ -648,6 +651,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/file_names.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/messages.Po
+	-rm -f ./$(DEPDIR)/numbers.Po
 	-rm -f ./$(DEPDIR)/parser.Po
 	-rm -f ./$(DEPDIR)/scan.Po
 	-rm -f ./$(DEPDIR)/symbol_table.Po

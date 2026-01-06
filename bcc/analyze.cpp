@@ -1,25 +1,9 @@
 #include "analyze.h"
+#include "numbers.h"
 #include "treenode.h"
 
 namespace bc
 {
-    unsigned int toInt(const std::string &str)
-    {
-        unsigned int ret = 0;
-        try
-        {
-            if (!str.empty())
-            {
-                ret = std::stoi(str);
-            }
-        }
-        catch (std::exception &)
-        {
-        }
-
-        return ret;
-    }
-
     std::vector<SYMBOL_TABLE> Analyze::buildSymbolTable(const TreeNode *syntaxTree)
     {
         traverse(syntaxTree, &Analyze::insertNode, &Analyze::nullProc);

@@ -32,19 +32,20 @@ namespace bc
 
     TreeNode *Parser::parse()
     {
-        TreeNode *treeNode = new TreeNode{ProgramK, 0};
+        const auto treeNode = new TreeNode{ProgramK, 0};
 
         while ((token = scan->getToken()) != ENDFILE)
         {
-            treeNode->addChild(line_sequence());
+            treeNode->add_child(line_sequence());
         }
+
         return treeNode;
     }
 
     TreeNode *Parser::line_sequence()
     {
-        TreeNode *line = new TreeNode{LineK, scan->getLineno()};
-        line->attr.val = scan->tokenString;
+        const auto current_line = new TreeNode{LineK, scan->getLineno()};
+        current_line->attr.val = scan->tokenString;
         match(NUM);
 
         while (true)
@@ -52,16 +53,16 @@ namespace bc
             switch (token)
             {
             case DIM:
-                line->addChild(dim_sequence());
+                current_line->add_child(dim_sequence());
                 break;
             case END:
-                line->addChild(end_sequence());
+                current_line->add_child(end_sequence());
                 break;
             case PRINT:
-                line->addChild(print_sequence());
+                current_line->add_child(print_sequence());
                 break;
             case ID:
-                line->addChild(assign_sequence());
+                current_line->add_child(assign_sequence());
                 break;
             case ENDLINE:
                 break;
@@ -82,12 +83,12 @@ namespace bc
             }
         }
 
-        return line;
+        return current_line;
     }
 
     TreeNode *Parser::assign_sequence()
     {
-        TreeNode *assign = new TreeNode{AssignK, scan->getLineno()};
+        const auto assign = new TreeNode{AssignK, scan->getLineno()};
         assign->attr.name = scan->tokenString;
         match(ID);
 
@@ -98,17 +99,17 @@ namespace bc
         }
         else
         {
-            assign->type = Integer;
+            assign->type = Numeric;
         }
         match(EQ);
-        assign->addChild(exp_sequence());
+        assign->add_child(exp_sequence());
 
         return assign;
     }
 
     TreeNode *Parser::exp_sequence()
     {
-        TreeNode *exp = new TreeNode{ExpK, scan->getLineno()};
+        const auto exp = new TreeNode{ExpK, scan->getLineno()};
 
         if (token == MINUS || token == PLUS)
         {
@@ -130,14 +131,14 @@ namespace bc
 
     TreeNode *Parser::end_sequence()
     {
-        TreeNode *end = new TreeNode{EndK, scan->getLineno()};
+        const auto end = new TreeNode{EndK, scan->getLineno()};
         match(END);
         return end;
     }
 
     TreeNode *Parser::print_sequence()
     {
-        TreeNode *print = new TreeNode{PrintK, scan->getLineno()};
+        const auto print = new TreeNode{PrintK, scan->getLineno()};
         match(PRINT);
 
         // FIXME add more expressions in print
@@ -164,7 +165,7 @@ namespace bc
 
     TreeNode *Parser::dim_sequence()
     {
-        TreeNode *dim = new TreeNode{DimK, scan->getLineno()};
+        const auto dim = new TreeNode{DimK, scan->getLineno()};
         match(DIM);
         bool first = true;
         do
@@ -173,7 +174,7 @@ namespace bc
             {
                 match(COMMA);
             }
-            dim->addChild(declare_sequence());
+            dim->add_child(declare_sequence());
             first = false;
         } while (token != ENDLINE && token != ERROR && token != ENDFILE && token != ENDCOMMAND && token == COMMA);
         return dim;
@@ -181,7 +182,7 @@ namespace bc
 
     TreeNode *Parser::declare_sequence()
     {
-        TreeNode *declare = new TreeNode{DeclareK, scan->getLineno()};
+        const auto declare = new TreeNode{DeclareK, scan->getLineno()};
         declare->attr.op = DIM;
         declare->attr.name = scan->tokenString;
         match(ID);
@@ -193,7 +194,7 @@ namespace bc
         }
         else
         {
-            declare->type = Float;
+            declare->type = Numeric;
         }
 
         match(LPAREN);
@@ -205,6 +206,7 @@ namespace bc
             declare->attr.val2 = scan->tokenString;
             match(NUM);
         }
+
         match(RPAREN);
         return declare;
     }
@@ -239,7 +241,7 @@ namespace bc
 
     TreeNode *Parser::statement()
     {
-        TreeNode *t = new TreeNode{StmtK, scan->getLineno()};
+        const auto t = new TreeNode{StmtK, scan->getLineno()};
         switch (token)
         {
         case IF:

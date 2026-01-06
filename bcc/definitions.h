@@ -85,8 +85,7 @@ namespace definitions
     /* ExpType is used for type checking */
     enum ExpType
     {
-        Integer,
-        Float,
+        Numeric,
         String
     };
 
