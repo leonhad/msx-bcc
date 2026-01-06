@@ -1,5 +1,6 @@
 #include "symbol_table.h"
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 using namespace definitions;
@@ -19,7 +20,7 @@ namespace bc
             msg += "Var ";
             msg += name;
             msg += " already defined";
-            throw msg;
+            throw runtime_error(msg);
         }
 
         SYMBOL_TABLE sym;
@@ -32,7 +33,7 @@ namespace bc
         symtab.push_back(sym);
     }
 
-    bool SymbolTable::lookup(const char *name, ExpType expType)
+    bool SymbolTable::lookup(const char *name, const ExpType expType)
     {
         bool ret = false;
 

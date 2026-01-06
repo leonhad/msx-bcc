@@ -18,20 +18,16 @@ int main(const int argc, char *argv[])
     {
         try
         {
-            Compiler compiler(argv[1], nullptr);
+            const Compiler compiler(argv[1], nullptr);
             compiler.run();
         }
-        catch (exception &err)
+        catch (const exception &err)
         {
             error(err.what());
         }
-        catch (string &err)
-        {
-            error(err);
-        }
         catch (...)
         {
-            error("unknown error.");
+            error("unexpected error.");
         }
     }
 
