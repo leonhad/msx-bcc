@@ -12,7 +12,7 @@ namespace bc
         location = 0;
     }
 
-    void SymbolTable::insert(const char *name, VarType varType, ExpType expType, unsigned int lineno, unsigned int size1, unsigned int size2)
+    void SymbolTable::insert(const std::string &name, const VarType varType, const ExpType expType, const unsigned int lineno, const unsigned int size1, const unsigned int size2)
     {
         if (lookup(name, expType))
         {
@@ -30,25 +30,26 @@ namespace bc
         sym.size1 = size1;
         sym.size2 = size2;
         sym.lines.push_back(lineno);
-        symtab.push_back(sym);
+        table.push_back(sym);
     }
 
-    bool SymbolTable::lookup(const char *name, const ExpType expType)
+    bool SymbolTable::lookup(const std::string &name, const ExpType expType) const
     {
         bool ret = false;
 
-        for (const auto &i : symtab)
+        for (const auto &i : table)
         {
             if (i.name == name && i.expType == expType)
             {
                 ret = true;
             }
         }
+
         return ret;
     }
 
-    vector<SYMBOL_TABLE> SymbolTable::getSymtab()
+    vector<SYMBOL_TABLE> SymbolTable::get()
     {
-        return symtab;
+        return table;
     }
 } // namespace bc

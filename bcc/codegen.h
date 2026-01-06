@@ -19,7 +19,7 @@ namespace bc
       public:
         CodeGen(const std::string &output);
         ~CodeGen();
-        void generate(TreeNode *syntaxTree, const std::vector<SYMBOL_TABLE> &symtabs);
+        void generate(TreeNode syntaxTree, const std::vector<SYMBOL_TABLE> &symtabs);
 
       private:
         void emitFile(const char *file);
@@ -30,9 +30,9 @@ namespace bc
         void emitSection(definitions::SectionType section) const;
         void emitInitMethod(const char *name, unsigned int line) const;
         void generateVars(const std::vector<SYMBOL_TABLE> &symtabs) const;
-        void generateLine(TreeNode *tree);
-        void generateDim(TreeNode *tree);
-        void generateDeclare(TreeNode *tree);
-        void generatePrint(TreeNode *tree);
+        void generateLine(TreeNode &tree);
+        void generateDim(TreeNode &tree);
+        void generateDeclare(const TreeNode &tree);
+        void generatePrint(TreeNode &tree);
     };
 }

@@ -2,18 +2,13 @@
 
 namespace bc
 {
-    TreeNode::TreeNode(definitions::NodeKind kind, unsigned int lineno)
+    TreeNode::TreeNode(const definitions::NodeKind kind, const unsigned int lineno) : lineno{lineno}, kind{kind}, type{definitions::ExpType::Float}
     {
-        sibling = nullptr;
-        this->kind = kind;
-        this->lineno = lineno;
     }
 
-    TreeNode::~TreeNode()
+    void TreeNode::addChild(const TreeNode &child)
     {
-        for (auto i = child.begin(); i != child.end(); ++i)
-        {
-            delete *i;
-        }
+        this->child.push_back(child);
     }
-} // namespace bc
+
+}

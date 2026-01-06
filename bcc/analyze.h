@@ -10,13 +10,13 @@ namespace bc
         SymbolTable symtab;
 
       public:
-        std::vector<SYMBOL_TABLE> buildSymbolTable(TreeNode *syntaxTree);
+        std::vector<SYMBOL_TABLE> buildSymbolTable(const TreeNode &syntaxTree);
 
       private:
-        void traverse(TreeNode *treeNode, void (Analyze::*preProc)(TreeNode *), void (Analyze::*postProc)(TreeNode *));
+        void traverse(const TreeNode &treeNode, void (Analyze::*preProc)(const TreeNode &), void (Analyze::*postProc)(const TreeNode &));
 
-        void insertNode(TreeNode *treeNode);
+        void insertNode(const TreeNode &treeNode);
 
-        void nullProc(TreeNode *treeNode);
+        void nullProc(const TreeNode &treeNode);
     };
 }

@@ -20,7 +20,6 @@ namespace bc
         VarType varType;
         definitions::ExpType expType;
         std::vector<unsigned int> lines;
-        unsigned int memloc;
         unsigned int size1;
         unsigned int size2;
     } SYMBOL_TABLE;
@@ -28,14 +27,14 @@ namespace bc
     class SymbolTable
     {
         unsigned int location;
-        std::vector<SYMBOL_TABLE> symtab;
+        std::vector<SYMBOL_TABLE> table;
 
       public:
         SymbolTable();
-        void insert(const char *name, VarType varType, definitions::ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
-        bool lookup(const char *name, definitions::ExpType expType);
+        void insert(const std::string &name, VarType varType, definitions::ExpType expType, unsigned int lineno, unsigned int size1 = 0, unsigned int size2 = 0);
+        [[nodiscard]] bool lookup(const std::string &name, definitions::ExpType expType) const;
 
-        std::vector<SYMBOL_TABLE> getSymtab();
+        std::vector<SYMBOL_TABLE> get();
     };
 } // namespace bc
 

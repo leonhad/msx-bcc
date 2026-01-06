@@ -86,6 +86,7 @@ namespace definitions
     enum ExpType
     {
         Integer,
+        Float,
         String
     };
 

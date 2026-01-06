@@ -19,18 +19,18 @@ namespace bc
       public:
         explicit Parser(std::string filein);
         ~Parser();
-        TreeNode *parse();
+        TreeNode parse();
 
       private:
-        TreeNode *line_sequence();
-        TreeNode *dim_sequence();
-        TreeNode *declare_sequence();
-        TreeNode *end_sequence();
-        TreeNode *print_sequence();
-        TreeNode *assign_sequence();
-        TreeNode *exp_sequence();
-        TreeNode *stmt_sequence();
-        TreeNode *statement();
+        TreeNode line_sequence();
+        TreeNode dim_sequence();
+        TreeNode declare_sequence();
+        TreeNode end_sequence();
+        TreeNode print_sequence();
+        TreeNode assign_sequence();
+        TreeNode exp_sequence();
+        TreeNode stmt_sequence();
+        TreeNode statement();
         void match(definitions::TokenType expected);
     };
 

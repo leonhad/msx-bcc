@@ -2,23 +2,26 @@
 
 #include "attributes.h"
 #include "definitions.h"
+
+#include <memory>
 #include <vector>
 
 namespace bc
 {
+
     class TreeNode
     {
       public:
-        TreeNode(definitions::NodeKind kind, unsigned int lineno);
-        ~TreeNode();
+        explicit TreeNode(definitions::NodeKind kind, unsigned int lineno);
+        ~TreeNode() = default;
 
-        std::vector<TreeNode *> child;
-        TreeNode *sibling;
-        unsigned int lineno;
+        void addChild(const TreeNode &child);
+
+        const unsigned int lineno;
         definitions::NodeKind kind;
 
+        std::vector<TreeNode> child;
         Attributes attr;
         definitions::ExpType type;
     };
-
 }

@@ -36,7 +36,7 @@ namespace bc
         *outputFile << _name << ":" << endl;
     }
 
-    void CodeGen::generate(TreeNode *syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
+    void CodeGen::generate(TreeNode syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
     {
         emitComment("BCC compilation from MSX Basic");
         emitVersion();
@@ -57,15 +57,15 @@ namespace bc
         *outputFile << "\tmov %rsp, %rbp" << endl;
         emitBreakline();
 
-        for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i)
+        for (auto i = syntaxTree.child.begin(); i != syntaxTree.child.end(); ++i)
         {
-            switch ((*i)->kind)
+            switch (i->kind)
             {
             case LineK:
-                emitInitMethod((*i)->attr.val.c_str(), (*i)->lineno + 1);
+                emitInitMethod(i->attr.val.c_str(), i->lineno + 1);
                 generateLine(*i);
 
-                if ((i + 1) == syntaxTree->child.end())
+                if ((i + 1) == syntaxTree.child.end())
                 {
                     *outputFile << "\tleave" << endl;
                     *outputFile << "\tret" << endl;
@@ -80,26 +80,26 @@ namespace bc
         }
     }
 
-    void CodeGen::generateLine(TreeNode *tree)
+    void CodeGen::generateLine(TreeNode &tree)
     {
         ostringstream _tempLine;
         _tempLine << "L" << locals;
 
         *outputFile << "L" << locals << ":" << endl;
         locals++;
-        vector<TreeNode *>::iterator i;
-        for (i = tree->child.begin(); i != tree->child.end(); ++i)
+
+        for (auto & i : tree.child)
         {
-            switch ((*i)->kind)
+            switch (i.kind)
             {
             case DimK:
-                generateDim(*i);
+                generateDim(i);
                 break;
             case EndK:
                 *outputFile << "\tcall _basic_end" << endl;
                 break;
             case PrintK:
-                generatePrint(*i);
+                generatePrint(i);
                 break;
             default:
                 cerr << "Tipo de TreeNode não esperado." << endl;
@@ -108,11 +108,11 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDim(TreeNode *tree)
+    void CodeGen::generateDim(TreeNode &tree)
     {
-        for (const auto & i : tree->child)
+        for (const auto & i : tree.child)
         {
-            switch (i->kind)
+            switch (i.kind)
             {
             case DeclareK:
                 generateDeclare(i);
@@ -124,29 +124,29 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDeclare(TreeNode *tree)
+    void CodeGen::generateDeclare(const TreeNode &tree)
     {
-        string name = tree->attr.name;
-        if (tree->type == String)
+        string name = tree.attr.name;
+        if (tree.type == String)
         {
             name += "$";
         }
 
-        if (tree->attr.op == DIM)
+        if (tree.attr.op == DIM)
         {
-            unsigned int size = atoi(tree->attr.val.c_str());
+            unsigned int size = atoi(tree.attr.val.c_str());
 
-            if (const unsigned int size2 = atoi(tree->attr.val2.c_str()))
+            if (const unsigned int size2 = atoi(tree.attr.val2.c_str()))
             {
                 size *= size2;
             }
 
-            if (tree->type == String)
+            if (tree.type == String)
             {
                 // String size
                 size *= 256;
             }
-            else if (tree->type == Integer)
+            else if (tree.type == Integer)
             {
                 // Integer size
                 size *= 4;
@@ -163,7 +163,7 @@ namespace bc
         }
     }
 
-    void CodeGen::generatePrint(TreeNode *tree)
+    void CodeGen::generatePrint(TreeNode &tree)
     {
     }
 
@@ -183,21 +183,21 @@ namespace bc
 
     void CodeGen::emitSection(const SectionType section) const
     {
-        char *_section;
+        auto _section = "";
 
         switch (section)
         {
         case S_RDATA:
             break;
-            _section = (char *)".rdata";
+            _section = ".rdata";
         case S_DATA:
-            _section = (char *)".data";
+            _section = ".data";
             break;
         case S_BSS:
-            _section = (char *)".bss";
+            _section = ".bss";
             break;
         case S_TEXT:
-            _section = (char *)".text";
+            _section = ".text";
             break;
         }
         *outputFile << "\t" << _section << endl;

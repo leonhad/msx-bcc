@@ -29,11 +29,11 @@ namespace bc
     void Compiler::run() const
     {
         Parser parser{this->filein};
-        const auto syntaxTree = make_unique<TreeNode *>(parser.parse());
+        const TreeNode syntaxTree = parser.parse();
 
         debug("building symbol table...");
         Analyze analyze;
-        const auto symbols = analyze.buildSymbolTable(*syntaxTree);
+        const auto symbols = analyze.buildSymbolTable(syntaxTree);
 
         // debug("Checking Types...");
         //  typeCheck(syntaxTree);
@@ -41,7 +41,7 @@ namespace bc
 
         debug("generating assembly code...");
         CodeGen codegen = this->fileAssembly;
-        codegen.generate(*syntaxTree, symbols);
+        codegen.generate(syntaxTree, symbols);
 
         compile();
     }
