@@ -8,42 +8,37 @@ using namespace definitions;
 namespace bc
 {
 
-    CodeGen::CodeGen(string filein, string fileout)
+    CodeGen::CodeGen(const std::string &output) : locals{0}, scope{0}
     {
-        this->filein = filein;
-        this->fileout = new ofstream(fileout.c_str());
-        locals = 0;
-        scope = 0;
+        this->outputFile = new ofstream(output);
     }
 
     CodeGen::~CodeGen()
     {
-        if (fileout)
+        if (outputFile)
         {
-            if (fileout->is_open())
+            if (outputFile->is_open())
             {
-                fileout->flush();
-                fileout->close();
+                outputFile->flush();
+                outputFile->close();
             }
 
             // delete fileout;
         }
     }
 
-    void CodeGen::emitInitMethod(const char *name, unsigned int line)
+    void CodeGen::emitInitMethod(const char *name, unsigned int line) const
     {
         string _name = "_";
         _name += name;
 
-        // emitAlign(2);
-        *fileout << ".globl _" << name << endl;
-        *fileout << _name << ":" << endl;
+        *outputFile << ".globl _" << name << endl;
+        *outputFile << _name << ":" << endl;
     }
 
-    void CodeGen::generate(TreeNode *syntaxTree, vector<SYMBOL_TABLE> symtabs)
+    void CodeGen::generate(TreeNode *syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
     {
         emitComment("BCC compilation from MSX Basic");
-        emitFile(filein.c_str());
         emitVersion();
         emitBreakline();
 
@@ -55,11 +50,11 @@ namespace bc
 
         // Program
         emitSection(S_TEXT);
-        *fileout << "Ltext0:" << endl;
+        *outputFile << "Ltext0:" << endl;
 
         emitInitMethod("basic_start", 0);
-        *fileout << "\tpush %rbp" << endl;
-        *fileout << "\tmov %rsp, %rbp" << endl;
+        *outputFile << "\tpush %rbp" << endl;
+        *outputFile << "\tmov %rsp, %rbp" << endl;
         emitBreakline();
 
         for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i)
@@ -72,8 +67,8 @@ namespace bc
 
                 if ((i + 1) == syntaxTree->child.end())
                 {
-                    *fileout << "\tleave" << endl;
-                    *fileout << "\tret" << endl;
+                    *outputFile << "\tleave" << endl;
+                    *outputFile << "\tret" << endl;
                 }
 
                 emitBreakline();
@@ -90,7 +85,7 @@ namespace bc
         ostringstream _tempLine;
         _tempLine << "L" << locals;
 
-        *fileout << "L" << locals << ":" << endl;
+        *outputFile << "L" << locals << ":" << endl;
         locals++;
         vector<TreeNode *>::iterator i;
         for (i = tree->child.begin(); i != tree->child.end(); ++i)
@@ -101,7 +96,7 @@ namespace bc
                 generateDim(*i);
                 break;
             case EndK:
-                *fileout << "\tcall _basic_end" << endl;
+                *outputFile << "\tcall _basic_end" << endl;
                 break;
             case PrintK:
                 generatePrint(*i);
@@ -141,9 +136,8 @@ namespace bc
         if (tree->attr.op == DIM)
         {
             unsigned int size = atoi(tree->attr.val.c_str());
-            const unsigned int size2 = atoi(tree->attr.val2.c_str());
 
-            if (size2)
+            if (const unsigned int size2 = atoi(tree->attr.val2.c_str()))
             {
                 size *= size2;
             }
@@ -158,12 +152,12 @@ namespace bc
                 // Integer size
                 size *= 4;
             }
-            *fileout << "\txorq %rax, %rax" << endl;
-            *fileout << "\tmovq $" << size << ", %rcx" << endl;
-            *fileout << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
-            *fileout << ".LC" << locals << ":" << endl;
-            *fileout << "\tmovl %eax, (%edx)" << endl;
-            *fileout << "\tloop .LC" << locals << endl;
+            *outputFile << "\txorq %rax, %rax" << endl;
+            *outputFile << "\tmovq $" << size << ", %rcx" << endl;
+            *outputFile << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
+            *outputFile << ".LC" << locals << ":" << endl;
+            *outputFile << "\tmovl %eax, (%edx)" << endl;
+            *outputFile << "\tloop .LC" << locals << endl;
 
             locals++;
             emitBreakline();
@@ -180,15 +174,15 @@ namespace bc
 
     void CodeGen::emitVersion()
     {
-        *fileout << "\t.version \"1.0\"" << endl;
+        *outputFile << "\t.version \"1.0\"" << endl;
     }
 
     void CodeGen::emitBreakline()
     {
-        *fileout << endl;
+        *outputFile << endl;
     }
 
-    void CodeGen::emitSection(SectionType section)
+    void CodeGen::emitSection(const SectionType section) const
     {
         char *_section;
 
@@ -207,53 +201,53 @@ namespace bc
             _section = (char *)".text";
             break;
         }
-        *fileout << "\t" << _section << endl;
+        *outputFile << "\t" << _section << endl;
     }
 
-    void CodeGen::emitComment(const char *comment)
+    void CodeGen::emitComment(const char *comment) const
     {
-        *fileout << "\t// " << comment << endl;
+        *outputFile << "\t// " << comment << endl;
     }
 
-    void CodeGen::emitAlign(int align)
+    void CodeGen::emitAlign(const int align) const
     {
-        *fileout << "\t.align " << align << endl;
+        *outputFile << "\t.align " << align << endl;
     }
 
-    void CodeGen::generateVars(vector<SYMBOL_TABLE> symtabs)
+    void CodeGen::generateVars(const vector<SYMBOL_TABLE> &symtabs) const
     {
         string name;
         unsigned int size;
 
         emitAlign(8);
 
-        for (auto i = symtabs.begin(); i != symtabs.end(); ++i)
+        for (const auto &symtab : symtabs)
         {
-            switch ((*i).varType)
+            switch (symtab.varType)
             {
             case DimV:
-                size = (*i).size1;
-                if ((*i).size2)
+                size = symtab.size1;
+                if (symtab.size2)
                 {
-                    size *= (*i).size2;
+                    size *= symtab.size2;
                 }
-                name = (*i).name;
-                if ((*i).expType == String)
+                name = symtab.name;
+                if (symtab.expType == String)
                 {
                     name += "$";
                     // String size
                     size *= 256;
                 }
-                else if ((*i).expType == Integer)
+                else if (symtab.expType == Integer)
                 {
                     // Integer size
                     size *= 4;
                 }
-                *fileout << "\t.lcomm _" << name << "," << size << endl;
+                *outputFile << "\t.lcomm _" << name << "," << size << endl;
                 break;
             default:
                 break;
             }
         }
     }
-} // namespace bc
+}

@@ -1,6 +1,8 @@
 #include "compiler.h"
 #include "file_names.h"
 #include "messages.h"
+
+#include <memory>
 #include <string>
 
 using namespace std;
@@ -22,31 +24,24 @@ namespace bc
 
         fileAssembly = get_assembly_name(remove_extension(filein).c_str());
 
-        parser = new Parser(this->filein);
-        codegen = new CodeGen(this->filein, this->fileAssembly);
-        syntaxTree = nullptr;
     }
 
-    Compiler::~Compiler()
+    void Compiler::run() const
     {
-        delete syntaxTree;
-        delete parser;
-    }
-
-    void Compiler::run()
-    {
-        syntaxTree = parser->parse();
+        Parser parser{this->filein};
+        const auto syntaxTree = make_unique<TreeNode *>(parser.parse());
 
         debug("building symbol table...");
         Analyze analyze;
-        const auto symbols = analyze.buildSymbolTable(syntaxTree);
+        const auto symbols = analyze.buildSymbolTable(*syntaxTree);
 
-        //debug("Checking Types...");
-        // typeCheck(syntaxTree);
-        // debug("Type Checking Finished");
+        // debug("Checking Types...");
+        //  typeCheck(syntaxTree);
+        //  debug("Type Checking Finished");
 
         debug("generating assembly code...");
-        codegen->generate(syntaxTree, symbols);
+        CodeGen codegen = this->fileAssembly;
+        codegen.generate(*syntaxTree, symbols);
 
         compile();
     }

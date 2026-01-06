@@ -8,32 +8,31 @@
 
 namespace bc
 {
-
     class CodeGen
     {
-        std::string filein;
         std::string currentLine;
-        std::ofstream *fileout;
+        std::ofstream *outputFile;
+
         unsigned int locals;
         unsigned int scope;
 
       public:
-        CodeGen(std::string filein, std::string fileout);
+        CodeGen(const std::string &output);
         ~CodeGen();
-        void generate(TreeNode *syntaxTree, std::vector<SYMBOL_TABLE> symtabs);
+        void generate(TreeNode *syntaxTree, const std::vector<SYMBOL_TABLE> &symtabs);
 
       private:
         void emitFile(const char *file);
         void emitVersion();
         void emitBreakline();
-        void emitAlign(int align);
-        void emitComment(const char *comment);
-        void emitSection(definitions::SectionType section);
-        void emitInitMethod(const char *name, unsigned int line);
-        void generateVars(std::vector<SYMBOL_TABLE> symtabs);
+        void emitAlign(int align) const;
+        void emitComment(const char *comment) const;
+        void emitSection(definitions::SectionType section) const;
+        void emitInitMethod(const char *name, unsigned int line) const;
+        void generateVars(const std::vector<SYMBOL_TABLE> &symtabs) const;
         void generateLine(TreeNode *tree);
         void generateDim(TreeNode *tree);
         void generateDeclare(TreeNode *tree);
         void generatePrint(TreeNode *tree);
     };
-} // namespace bc
+}
