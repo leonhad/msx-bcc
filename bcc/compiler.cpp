@@ -29,7 +29,7 @@ namespace bc
     void Compiler::run() const
     {
         Parser parser{this->filein};
-        const TreeNode syntaxTree = parser.parse();
+        const TreeNode *syntaxTree = parser.parse();
 
         debug("building symbol table...");
         Analyze analyze;

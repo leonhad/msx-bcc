@@ -30,21 +30,21 @@ namespace bc
         }
     }
 
-    TreeNode Parser::parse()
+    TreeNode *Parser::parse()
     {
-        TreeNode treeNode{ProgramK, 0};
+        TreeNode *treeNode = new TreeNode{ProgramK, 0};
 
         while ((token = scan->getToken()) != ENDFILE)
         {
-            treeNode.addChild(line_sequence());
+            treeNode->addChild(line_sequence());
         }
         return treeNode;
     }
 
-    TreeNode Parser::line_sequence()
+    TreeNode *Parser::line_sequence()
     {
-        TreeNode line{LineK, scan->getLineno()};
-        line.attr.val = scan->tokenString;
+        TreeNode *line = new TreeNode{LineK, scan->getLineno()};
+        line->attr.val = scan->tokenString;
         match(NUM);
 
         while (true)
@@ -52,16 +52,16 @@ namespace bc
             switch (token)
             {
             case DIM:
-                line.addChild(dim_sequence());
+                line->addChild(dim_sequence());
                 break;
             case END:
-                line.addChild(end_sequence());
+                line->addChild(end_sequence());
                 break;
             case PRINT:
-                line.addChild(print_sequence());
+                line->addChild(print_sequence());
                 break;
             case ID:
-                line.addChild(assign_sequence());
+                line->addChild(assign_sequence());
                 break;
             case ENDLINE:
                 break;
@@ -81,64 +81,66 @@ namespace bc
                 break;
             }
         }
+
         return line;
     }
 
-    TreeNode Parser::assign_sequence()
+    TreeNode *Parser::assign_sequence()
     {
-        TreeNode assign{AssignK, scan->getLineno()};
-        assign.attr.name = scan->tokenString;
+        TreeNode *assign = new TreeNode{AssignK, scan->getLineno()};
+        assign->attr.name = scan->tokenString;
         match(ID);
 
         if (token == DOLLAR)
         {
-            assign.type = String;
+            assign->type = String;
             match(DOLLAR);
         }
         else
         {
-            assign.type = Integer;
+            assign->type = Integer;
         }
         match(EQ);
-        assign.addChild(exp_sequence());
+        assign->addChild(exp_sequence());
 
         return assign;
     }
 
-    TreeNode Parser::exp_sequence()
+    TreeNode *Parser::exp_sequence()
     {
-        TreeNode exp{ExpK, scan->getLineno()};
+        TreeNode *exp = new TreeNode{ExpK, scan->getLineno()};
 
         if (token == MINUS || token == PLUS)
         {
-            exp.attr.op = token;
+            exp->attr.op = token;
             match(token);
         }
         if (token == NUM)
         {
-            exp.attr.val = (char *)scan->tokenString.c_str();
-            exp.kind = ConstK;
+            exp->attr.val = scan->tokenString;
+            exp->kind = ConstK;
         }
         if (token == ID)
         {
-            exp.attr.val = (char *)scan->tokenString.c_str();
+            exp->attr.val = scan->tokenString;
         }
+
         return exp;
     }
 
-    TreeNode Parser::end_sequence()
+    TreeNode *Parser::end_sequence()
     {
-        TreeNode end{EndK, scan->getLineno()};
+        TreeNode *end = new TreeNode{EndK, scan->getLineno()};
         match(END);
         return end;
     }
 
-    TreeNode Parser::print_sequence()
+    TreeNode *Parser::print_sequence()
     {
-        TreeNode print{PrintK, scan->getLineno()};
+        TreeNode *print = new TreeNode{PrintK, scan->getLineno()};
         match(PRINT);
 
-        // FIXME add more exporessions in print
+        // FIXME add more expressions in print
         bool first = true;
         do
         {
@@ -160,9 +162,9 @@ namespace bc
         return print;
     }
 
-    TreeNode Parser::dim_sequence()
+    TreeNode *Parser::dim_sequence()
     {
-        TreeNode dim{DimK, scan->getLineno()};
+        TreeNode *dim = new TreeNode{DimK, scan->getLineno()};
         match(DIM);
         bool first = true;
         do
@@ -171,43 +173,43 @@ namespace bc
             {
                 match(COMMA);
             }
-            dim.child.push_back(declare_sequence());
+            dim->addChild(declare_sequence());
             first = false;
         } while (token != ENDLINE && token != ERROR && token != ENDFILE && token != ENDCOMMAND && token == COMMA);
         return dim;
     }
 
-    TreeNode Parser::declare_sequence()
+    TreeNode *Parser::declare_sequence()
     {
-        TreeNode declare{DeclareK, scan->getLineno()};
-        declare.attr.op = DIM;
-        declare.attr.name = scan->tokenString;
+        TreeNode *declare = new TreeNode{DeclareK, scan->getLineno()};
+        declare->attr.op = DIM;
+        declare->attr.name = scan->tokenString;
         match(ID);
 
         if (token == DOLLAR)
         {
             match(DOLLAR);
-            declare.type = String;
+            declare->type = String;
         }
         else
         {
-            declare.type = Float;
+            declare->type = Float;
         }
 
         match(LPAREN);
-        declare.attr.val = scan->tokenString;
+        declare->attr.val = scan->tokenString;
         match(NUM);
         if (token == COMMA)
         {
             match(COMMA);
-            declare.attr.val2 = scan->tokenString;
+            declare->attr.val2 = scan->tokenString;
             match(NUM);
         }
         match(RPAREN);
         return declare;
     }
 
-    TreeNode Parser::stmt_sequence()
+    TreeNode *Parser::stmt_sequence()
     {
         // TreeNode * t = statement();
         // TreeNode * p = t;
@@ -232,12 +234,12 @@ namespace bc
              * }
              */
         }
-        return TreeNode{StmtK, scan->getLineno()};
+        return nullptr;
     }
 
-    TreeNode Parser::statement()
+    TreeNode *Parser::statement()
     {
-        TreeNode t{StmtK, scan->getLineno()};
+        TreeNode *t = new TreeNode{StmtK, scan->getLineno()};
         switch (token)
         {
         case IF:

@@ -6,9 +6,16 @@ namespace bc
     {
     }
 
-    void TreeNode::addChild(const TreeNode &child)
+    TreeNode::~TreeNode()
     {
-        this->child.push_back(child);
+        for (const auto &i : child)
+        {
+            delete i;
+        }
     }
 
+    void TreeNode::addChild(TreeNode *node)
+    {
+        this->child.push_back(node);
+    }
 }

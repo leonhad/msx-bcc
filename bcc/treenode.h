@@ -13,14 +13,14 @@ namespace bc
     {
       public:
         explicit TreeNode(definitions::NodeKind kind, unsigned int lineno);
-        ~TreeNode() = default;
+        ~TreeNode();
 
-        void addChild(const TreeNode &child);
+        void addChild(TreeNode *node);
 
         const unsigned int lineno;
         definitions::NodeKind kind;
 
-        std::vector<TreeNode> child;
+        std::vector<TreeNode *> child;
         Attributes attr;
         definitions::ExpType type;
     };

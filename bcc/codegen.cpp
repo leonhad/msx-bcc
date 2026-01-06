@@ -36,7 +36,7 @@ namespace bc
         *outputFile << _name << ":" << endl;
     }
 
-    void CodeGen::generate(TreeNode syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
+    void CodeGen::generate(const TreeNode *syntaxTree, const vector<SYMBOL_TABLE> &symtabs)
     {
         emitComment("BCC compilation from MSX Basic");
         emitVersion();
@@ -57,15 +57,15 @@ namespace bc
         *outputFile << "\tmov %rsp, %rbp" << endl;
         emitBreakline();
 
-        for (auto i = syntaxTree.child.begin(); i != syntaxTree.child.end(); ++i)
+        for (auto i = syntaxTree->child.begin(); i != syntaxTree->child.end(); ++i)
         {
-            switch (i->kind)
+            switch ((*i)->kind)
             {
             case LineK:
-                emitInitMethod(i->attr.val.c_str(), i->lineno + 1);
+                emitInitMethod((*i)->attr.val.c_str(), (*i)->lineno + 1);
                 generateLine(*i);
 
-                if ((i + 1) == syntaxTree.child.end())
+                if ((i + 1) == syntaxTree->child.end())
                 {
                     *outputFile << "\tleave" << endl;
                     *outputFile << "\tret" << endl;
@@ -80,7 +80,7 @@ namespace bc
         }
     }
 
-    void CodeGen::generateLine(TreeNode &tree)
+    void CodeGen::generateLine(TreeNode *tree)
     {
         ostringstream _tempLine;
         _tempLine << "L" << locals;
@@ -88,9 +88,9 @@ namespace bc
         *outputFile << "L" << locals << ":" << endl;
         locals++;
 
-        for (auto & i : tree.child)
+        for (auto &i : tree->child)
         {
-            switch (i.kind)
+            switch (i->kind)
             {
             case DimK:
                 generateDim(i);
@@ -108,11 +108,11 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDim(TreeNode &tree)
+    void CodeGen::generateDim(TreeNode *tree)
     {
-        for (const auto & i : tree.child)
+        for (const auto &i : tree->child)
         {
-            switch (i.kind)
+            switch (i->kind)
             {
             case DeclareK:
                 generateDeclare(i);
@@ -124,29 +124,29 @@ namespace bc
         }
     }
 
-    void CodeGen::generateDeclare(const TreeNode &tree)
+    void CodeGen::generateDeclare(const TreeNode *tree)
     {
-        string name = tree.attr.name;
-        if (tree.type == String)
+        string name = tree->attr.name;
+        if (tree->type == String)
         {
             name += "$";
         }
 
-        if (tree.attr.op == DIM)
+        if (tree->attr.op == DIM)
         {
-            unsigned int size = atoi(tree.attr.val.c_str());
+            unsigned int size = atoi(tree->attr.val.c_str());
 
-            if (const unsigned int size2 = atoi(tree.attr.val2.c_str()))
+            if (const unsigned int size2 = atoi(tree->attr.val2.c_str()))
             {
                 size *= size2;
             }
 
-            if (tree.type == String)
+            if (tree->type == String)
             {
                 // String size
                 size *= 256;
             }
-            else if (tree.type == Integer)
+            else if (tree->type == Integer)
             {
                 // Integer size
                 size *= 4;
@@ -163,7 +163,7 @@ namespace bc
         }
     }
 
-    void CodeGen::generatePrint(TreeNode &tree)
+    void CodeGen::generatePrint(const TreeNode *tree)
     {
     }
 
