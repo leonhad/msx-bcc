@@ -1,6 +1,6 @@
 #include "numbers.h"
 
-#include <exception>
+#include <stdexcept>
 
 unsigned int to_int(const std::string &str)
 {
@@ -12,7 +12,10 @@ unsigned int to_int(const std::string &str)
             ret = std::stoi(str);
         }
     }
-    catch (std::exception &)
+    catch (std::out_of_range &)
+    {
+    }
+    catch (std::invalid_argument &)
     {
     }
 
