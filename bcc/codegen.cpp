@@ -4,11 +4,9 @@
 #include <sstream>
 
 using namespace std;
-using namespace definitions;
 
 namespace bc
 {
-
     CodeGen::CodeGen(const std::string &output) : output{output}, locals{0}, scope{0}
     {
     }

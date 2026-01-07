@@ -18,7 +18,7 @@ namespace bc
     {
         switch (tree_node->kind)
         {
-        case definitions::DIM_K:
+        case DIM_K:
             for (const auto &i : tree_node->child)
             {
                 symbols.insert(i->attr.name, DIM_V, i->type, i->lineno, to_int(i->attr.value), to_int(i->attr.value_2));

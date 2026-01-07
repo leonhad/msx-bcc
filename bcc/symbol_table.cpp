@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 using namespace std;
-using namespace definitions;
 
 namespace bc
 {

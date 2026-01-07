@@ -2,11 +2,9 @@
 #include <iostream>
 
 using namespace std;
-using namespace definitions;
 
 namespace bc
 {
-
     Parser::Parser(const string &file_input) : line{EOF}, program_line{EOF}, current_token{END_FILE}, scan{file_input}
     {
     }

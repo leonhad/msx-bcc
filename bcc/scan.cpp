@@ -2,11 +2,9 @@
 #include <iostream>
 
 using namespace std;
-using namespace definitions;
 
 namespace bc
 {
-
     Scan::Scan(const string &filein) : filein{filein.c_str(), ios::in | ios::out}
     {
         current = EOF;

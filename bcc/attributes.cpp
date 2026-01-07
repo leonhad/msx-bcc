@@ -3,7 +3,7 @@
 
 namespace bc
 {
-    Attributes::Attributes() : operation{definitions::ERROR}
+    Attributes::Attributes() : operation{ERROR}
     {
     }
 

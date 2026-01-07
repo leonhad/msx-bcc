@@ -27,7 +27,7 @@ namespace bc
         void emit_break_line();
         void emit_align(int align);
         void emit_comment(const char *comment);
-        void emit_section(definitions::SectionType section);
+        void emit_section(SectionType section);
         void emit_init_method(const char *name, unsigned int line);
         void generate_vars(const std::vector<SYMBOL_TABLE> &symbols);
         void generate_line(TreeNode *tree);

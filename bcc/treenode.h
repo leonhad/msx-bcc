@@ -6,20 +6,19 @@
 
 namespace bc
 {
-
     class TreeNode
     {
       public:
-        explicit TreeNode(definitions::NodeKind kind, unsigned int line_number);
+        explicit TreeNode(NodeKind kind, unsigned int line_number);
         ~TreeNode();
 
         void add_child(TreeNode *node);
 
         const unsigned int lineno;
-        definitions::NodeKind kind;
+        NodeKind kind;
 
         std::vector<TreeNode *> child;
         Attributes attr;
-        definitions::ExpressionType type;
+        ExpressionType type;
     };
 }

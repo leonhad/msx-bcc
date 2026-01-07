@@ -8,7 +8,7 @@ namespace bc
     class Attributes
     {
       public:
-        definitions::TokenType operation;
+        TokenType operation;
         std::string value;
         std::string value_2;
         std::string name;

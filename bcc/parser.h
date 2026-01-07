@@ -12,7 +12,7 @@ namespace bc
     {
         int line;
         int program_line;
-        definitions::TokenType current_token;
+        TokenType current_token;
         Scan scan;
 
       public:
@@ -31,7 +31,7 @@ namespace bc
         TreeNode *exp_sequence();
         TreeNode *stmt_sequence();
         TreeNode *statement();
-        void match(definitions::TokenType expected);
+        void match(TokenType expected);
     };
 
 } // namespace bc

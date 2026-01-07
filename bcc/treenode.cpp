@@ -2,7 +2,7 @@
 
 namespace bc
 {
-    TreeNode::TreeNode(const definitions::NodeKind kind, const unsigned int line_number) : lineno{line_number}, kind{kind}, type{definitions::ExpressionType::NUMERIC_T}
+    TreeNode::TreeNode(const NodeKind kind, const unsigned int line_number) : lineno{line_number}, kind{kind}, type{NUMERIC_T}
     {
     }
 
