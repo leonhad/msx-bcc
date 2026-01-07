@@ -1,7 +1,10 @@
 #include "codegen.h"
+
+#include "messages.h"
 #include "numbers.h"
+
+#include <algorithm>
 #include <iostream>
-#include <sstream>
 
 using namespace std;
 
@@ -23,24 +26,25 @@ namespace bc
         }
     }
 
-    void CodeGen::emit_init_method(const char *name, unsigned int line)
+    void CodeGen::emit_init_method(const char *name)
     {
-        string _name = "_";
-        _name += name;
-
-        output << ".globl _" << name << endl;
-        output << _name << ":" << endl;
+        output << "\t.p2align 4" << endl;
+        output << "\t.type _" << name << ", @function " << endl;
+        output << "\t.globl _" << name << endl;
+        output << "_" << name << ":" << endl;
     }
 
-    void CodeGen::generate(const TreeNode *syntax_tree, const vector<SYMBOL_TABLE> &symbols)
+    void CodeGen::generate(const TreeNode *syntax_tree, const vector<SYMBOL_TABLE> &table)
     {
+        this->symbols = table;
+
         emit_comment("BCC compilation from MSX Basic");
         emit_version();
         emit_break_line();
 
         // vars
         emit_section(S_DATA);
-        generate_vars(symbols);
+        generate_vars();
 
         emit_break_line();
 
@@ -48,41 +52,33 @@ namespace bc
         emit_section(S_TEXT);
         output << "Ltext0:" << endl;
 
-        emit_init_method("basic_start", 0);
+        emit_init_method("basic_start");
         output << "\tpush %rbp" << endl;
         output << "\tmov %rsp, %rbp" << endl;
         emit_break_line();
 
-        for (auto i = syntax_tree->child.begin(); i != syntax_tree->child.end(); ++i)
+        for (const auto &i : syntax_tree->child)
         {
-            switch ((*i)->kind)
+            switch (i->kind)
             {
             case LINE_K:
-                emit_init_method((*i)->attr.value.c_str(), (*i)->lineno + 1);
-                generate_line(*i);
-
-                if ((i + 1) == syntax_tree->child.end())
-                {
-                    output << "\tleave" << endl;
-                    output << "\tret" << endl;
-                }
+                generate_line(i);
 
                 emit_break_line();
                 break;
             default:
-                cerr << "Tipo de TreeNode não esperado. " << endl;
+                error("Unexpected treenode. ");
                 break;
             }
         }
+
+        output << "\tleave" << endl;
+        output << "\tret" << endl;
     }
 
-    void CodeGen::generate_line(TreeNode *tree)
+    void CodeGen::generate_line(const TreeNode *tree)
     {
-        ostringstream _tempLine;
-        _tempLine << "L" << locals;
-
-        output << "L" << locals << ":" << endl;
-        locals++;
+        output << "L" << tree->attr.value << ":" << endl;
 
         for (auto &i : tree->child)
         {
@@ -94,6 +90,9 @@ namespace bc
             case END_K:
                 output << "\tcall _basic_end" << endl;
                 break;
+            case ASSIGN_K:
+                generate_assign(i);
+                break;
             case PRINT_K:
                 generate_print(i);
                 break;
@@ -104,7 +103,34 @@ namespace bc
         }
     }
 
-    void CodeGen::generate_dim(TreeNode *tree)
+    void CodeGen::generate_assign(const TreeNode *tree)
+    {
+        const auto name = tree->attr.name;
+        const auto search_symbol = find_if(symbols.begin(), symbols.end(), [name](const auto &table) { return table.name == name; } );
+        if (search_symbol == symbols.end())
+        {
+            throw runtime_error("variable '" + name + "' not found in symbol table");
+        }
+
+        const auto& symbol = *search_symbol;
+
+        if (symbol.variable_type == VARIABLE_V)
+        {
+            if (symbol.expression_type == NUMERIC_T)
+            {
+                // set value in eax
+                if (tree->child.size() == 1 && tree->child[0]->kind == CONSTANT_K)
+                {
+                    output << "\tmovq $" << tree->child[0]->attr.value << ", %rax" << endl;
+                }
+
+                // get value to eax
+                output << "\tmovq %rax, _" << name << "@GOTPCREL(%rip)" << endl;
+            }
+        }
+    }
+
+    void CodeGen::generate_dim(const TreeNode *tree)
     {
         for (const auto &i : tree->child)
         {
@@ -147,6 +173,7 @@ namespace bc
                 // Numeric size
                 size *= 4;
             }
+
             output << "\txorq %rax, %rax" << endl;
             output << "\tmovq $" << size << ", %rcx" << endl;
             output << "\tmovq _" << name << "@GOTPCREL(%rip), %rdx" << endl;
@@ -155,7 +182,6 @@ namespace bc
             output << "\tloop .LC" << locals << endl;
 
             locals++;
-            emit_break_line();
         }
     }
 
@@ -210,38 +236,60 @@ namespace bc
         output << "\t.align " << align << endl;
     }
 
-    void CodeGen::generate_vars(const vector<SYMBOL_TABLE> &symbols)
+    void CodeGen::generate_vars()
     {
-        string name;
-        unsigned int size;
-
         emit_align(8);
 
         for (const auto &symtab : symbols)
         {
+            unsigned int size = symtab.size_left;
+            string name = symtab.name;
+            if (symtab.expression_type == STRING_T)
+            {
+                name += "$";
+            }
+
+            output << "\t.globl	_" << name << endl;
+            output << "_" << name << ":" << endl;
             switch (symtab.variable_type)
             {
             case DIM_V:
-                size = symtab.size_left;
                 if (symtab.size_right)
                 {
                     size *= symtab.size_right;
                 }
-                name = symtab.name;
                 if (symtab.expression_type == STRING_T)
                 {
-                    name += "$";
                     // String size
                     size *= 256;
                 }
                 else if (symtab.expression_type == NUMERIC_T)
                 {
                     // Numeric size
-                    size *= 4;
+                    size *= 8;
                 }
 
-                output << "\t.lcomm _" << name << "," << size << endl;
+                emit_align(32);
+                output << "\t.zero " << size << endl;
+                output << "\t.type _" << name << ",@object" << endl;
+                output << "\t.size _" << name << "," << size << endl;
                 break;
+            case VARIABLE_V:
+                if (symtab.expression_type == STRING_T)
+                {
+                    // String size
+                    size = 256;
+                }
+                else if (symtab.expression_type == NUMERIC_T)
+                {
+                    size = 8;
+                }
+
+                emit_align(4);
+                output << "\t.zero " << size << endl;
+                output << "\t.long 0" << endl;
+                // output << "\t.type @integer" << endl;
+                output << "\t.size _" << name << ", " << size << endl;
             default:
                 break;
             }

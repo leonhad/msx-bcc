@@ -1,6 +1,11 @@
- #include <stdlib.h>
+#include <stdlib.h>
+
+int b[10];
+int c= 2;
 
 int main() {
- exit(-1);
- return 0;
+
+    c = 3;
+
+    return 0;
 }

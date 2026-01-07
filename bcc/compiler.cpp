@@ -64,7 +64,7 @@ namespace bc
 #error Unsupported platform
 #endif
 #elif __linux
-        assembly_command = "as -march generic64 -o ";
+        assembly_command = "as -march generic64 -g -o ";
         link_command = "ld -L. -lbasic ";
 #elif __unix // all unixes not caught above
 #error Unsupported platform

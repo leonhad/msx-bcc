@@ -12,6 +12,7 @@ namespace bc
     {
         std::string current_line;
         std::ofstream output;
+        std::vector<SYMBOL_TABLE> symbols;
 
         unsigned int locals;
         unsigned int scope;
@@ -19,7 +20,7 @@ namespace bc
       public:
         explicit CodeGen(const std::string &output);
         ~CodeGen();
-        void generate(const TreeNode *syntax_tree, const std::vector<SYMBOL_TABLE> &symbols);
+        void generate(const TreeNode *syntax_tree, const std::vector<SYMBOL_TABLE> &table);
 
       private:
         void emit_file(const char *file);
@@ -28,10 +29,11 @@ namespace bc
         void emit_align(int align);
         void emit_comment(const char *comment);
         void emit_section(SectionType section);
-        void emit_init_method(const char *name, unsigned int line);
-        void generate_vars(const std::vector<SYMBOL_TABLE> &symbols);
-        void generate_line(TreeNode *tree);
-        void generate_dim(TreeNode *tree);
+        void emit_init_method(const char *name);
+        void generate_vars();
+        void generate_line(const TreeNode *tree);
+        void generate_dim(const TreeNode *tree);
+        void generate_assign(const TreeNode *tree);
         void generate_declare(const TreeNode *tree);
         void generate_print(const TreeNode *tree);
     };
